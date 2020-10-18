@@ -1,4 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+$color-blue: #34C4B7;
+$color-green: #2B6F54;
+$color-green-ligth:#749F8B;
+$color-green-dark:#263930;
+$black: #000000;
+$white: #ffffff;
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.color-blue {
+  background-color: $color-blue !important;
+}
+.color-green {
+  background-color: $color-green !important;
+}
+.color-green-ligth {
+  background-color: $color-green-ligth !important;
+}
+.color-green-dark {
+  background-color: $color-green-dark !important;
+}
+.color-white {
+  color: $white;
+}
+.color-black {
+  color: $black;
+}
+.title{
+  color: $color-green-dark;
+  text-align: center;
+ }
+ .container {
+  margin: 2rem 5rem 2rem 5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  justify-content: center;
+}
+.primary-buttons{
+  margin: 1rem 2rem 1rem 2rem;
+  color: $white;
+  background: $color-green;
+}

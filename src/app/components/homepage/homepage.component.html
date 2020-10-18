@@ -1,15 +1,29 @@
-<div class="card-container">
+<div class="container">
+  <mat-grid-list cols="3" rowHeight="3:2">
 
-  <mat-card class="card">
-    <mat-card-header>
-      <mat-card-title>Soy Propietario</mat-card-title>
-    </mat-card-header>
-  </mat-card>
+    <mat-grid-tile colspan="2" rowspan="2" class="color-green-ligth">
+      <span class="color-white">Informacion</span>
+    </mat-grid-tile>
 
-  <mat-card class="card">
-    <mat-card-header>
-      <mat-card-title>Soy Empleado</mat-card-title>
-    </mat-card-header>
-  </mat-card>
+    <mat-grid-tile colspan="1" rowspan="1">
+      <div class=" card-container">
+        <mat-card class="card color-green">
+          <mat-card-header>
+            <mat-card-title class="color-white">Soy Propietario</mat-card-title>
+          </mat-card-header>
+        </mat-card>
+      </div>
+    </mat-grid-tile>
 
+    <mat-grid-tile colspan="1" rowspan="1">
+      <div class=" card-container">
+        <mat-card class="card color-green">
+          <mat-card-header>
+            <mat-card-title class="color-white">Soy Empleado</mat-card-title>
+          </mat-card-header>
+        </mat-card>
+      </div>
+    </mat-grid-tile>
+
+  </mat-grid-list>
 </div>

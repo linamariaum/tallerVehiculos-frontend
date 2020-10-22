@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 
 const routes: Routes = [
+  { path: 'login-emlpoyee', component: LoginEmlpoyeeComponent },
   { path: 'homepage', component: HomepageComponent },
-  { path: '**', pathMatch: 'full', redirectTo: 'homepage' }
+  { path: '**', pathMatch: 'full', redirectTo: 'homepage' },
 ];
 
 @NgModule({
   declarations: [],
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

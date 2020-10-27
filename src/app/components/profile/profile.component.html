@@ -1,0 +1,86 @@
+<div>
+  <mat-card class="container mat-elevation-z5">
+    <mat-card-header>
+      <mat-card-title class="title color-white">Información de perfil</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="example-form" [formGroup]="profileForm">
+        <mat-form-field class="example-full-width">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            required
+            type="text"
+            value={{employee.name}}
+            disabled
+          />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Nombre de usuario</mat-label>
+          <input
+            matInput
+            type="text"
+            value={{employee.userName}}
+            disabled
+          />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Teléfono</mat-label>
+          <input
+            matInput
+            required
+            type="text"
+            value={{employee.cellphone}}
+            [disabled]="edit"
+            formControlName="cellphoneFormControl"
+          />
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Correo electrónico</mat-label>
+          <input
+            matInput
+            required
+            type="email"
+            [disabled]="edit"
+            value={{employee.email}}
+            formControlName="emailFormControl"
+          />
+        </mat-form-field>
+        <mat-form-field class="example-full-width" *ngIf="!edit">
+          <mat-label>Contraseña actual</mat-label>
+          <input
+            matInput
+            required
+            type="password"
+          />
+        </mat-form-field>
+        <mat-form-field class="example-full-width" *ngIf="!edit">
+          <mat-label>Nueva contraseña</mat-label>
+          <input
+            matInput
+            required
+            type="password"
+            formControlName="passwordFormControl"
+          />
+        </mat-form-field>
+        <mat-form-field class="example-full-width" *ngIf="!edit">
+          <mat-label>Confirmar nueva contraseña</mat-label>
+          <input
+            matInput
+            required
+            type="password"
+            formControlName="passwordFormControl"
+          />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="center" *ngIf="edit; else saveButton">
+      <button mat-button class="color-blue" type="submit" (click)="toggleEdit()">Editar</button>
+    </mat-card-actions>
+    <ng-template #saveButton>
+      <mat-card-actions align="center">
+        <button mat-button class="color-blue" type="submit" (click)="save()">Guardar</button>
+      </mat-card-actions>
+    </ng-template>
+  </mat-card>
+</div>

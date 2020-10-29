@@ -1,55 +1,6 @@
-<!-- <div class="container">
-  <mat-grid-list cols="3" rowHeight="3:2">
-
-    <mat-grid-tile colspan="2" rowspan="2" class="color-green-ligth">
-      <div>
-        <h1 class="color-white">Nuestros servicios</h1>
-        <div style="float: left;">
-          <h3>Mecánica</h3>
-          <ul *ngFor="let item of mechanics">
-            <li>{{item}}</li>
-          </ul>
-        </div>
-        <div style="float: left;">
-          <h3>Revisiones automotriz</h3>
-          <ul *ngFor="let item of reviews">
-            <li>{{item}}</li>
-          </ul>
-        </div>
-        <div style="float: left;">
-          <h3>Estética automotriz</h3>
-          <ul *ngFor="let item of esthetic">
-            <li>{{item}}</li>
-          </ul>
-        </div>
-      </div>
-    </mat-grid-tile>
-
-    <mat-grid-tile colspan="1" rowspan="1">
-      <div class=" card-container">
-        <mat-card class="card color-green">
-          <mat-card-header>
-            <mat-card-title class="color-white">Soy Propietario</mat-card-title>
-          </mat-card-header>
-        </mat-card>
-      </div>
-    </mat-grid-tile>
-
-    <mat-grid-tile colspan="1" rowspan="1">
-      <div class=" card-container">
-        <mat-card class="card color-green">
-          <mat-card-header>
-            <mat-card-title class="color-white">Soy Empleado</mat-card-title>
-          </mat-card-header>
-        </mat-card>
-      </div>
-    </mat-grid-tile>
-
-  </mat-grid-list>
-</div> -->
-
 <div class="background">
   <div class="container">
+    <br><br>
     <div class="color-green-ligth" style="float: left; padding: 2rem; opacity: 90%;">
       <h1 class="color-white" style="text-align: center;">Nuestros servicios</h1>
       <div style="float: left;">
@@ -74,16 +25,16 @@
 
     <div>
       <div class=" card-container" style="float: left;">
-        <mat-card class="card color-green">
+        <mat-card class="card color-green" [routerLink]="['/profile', 0]">
           <mat-card-header>
-            <mat-card-title class="color-white" [routerLink]="['/profile', 0]">Soy Propietario</mat-card-title>
+            <mat-card-title class="color-white">Soy Propietario</mat-card-title>
           </mat-card-header>
         </mat-card>
       </div>
       <div class=" card-container" style="float: left;">
-        <mat-card class="card color-green">
+        <mat-card class="card color-green" [routerLink]="['/profile', 0]">
           <mat-card-header>
-            <mat-card-title class="color-white" [routerLink]="['/profile', 0]">Soy Empleado</mat-card-title>
+            <mat-card-title class="color-white">Soy Empleado</mat-card-title>
           </mat-card-header>
         </mat-card>
       </div>

@@ -1,29 +1,43 @@
-<div class="container">
-  <mat-grid-list cols="3" rowHeight="3:2">
+<div class="background">
+  <div class="container">
+    <br><br>
+    <div class="color-green-ligth" style="float: left; padding: 2rem; opacity: 90%;">
+      <h1 class="color-white" style="text-align: center;">Nuestros servicios</h1>
+      <div style="float: left;">
+        <h3><b>Mecánica:</b></h3>
+        <ul *ngFor="let item of mechanics">
+          <li>{{item}}</li>
+        </ul>
+      </div>
+      <div style="float: left;">
+        <h3><b>Revisión automotriz:</b></h3>
+        <ul *ngFor="let item of reviews">
+          <li>{{item}}</li>
+        </ul>
+      </div>
+      <div style="float: left;">
+        <h3><b>Estética automotriz:</b></h3>
+        <ul *ngFor="let item of esthetic">
+          <li>{{item}}</li>
+        </ul>
+      </div>
+    </div>
 
-    <mat-grid-tile colspan="2" rowspan="2" class="color-green-ligth">
-      <span class="color-white">Informacion</span>
-    </mat-grid-tile>
-
-    <mat-grid-tile colspan="1" rowspan="1">
-      <div class=" card-container">
-        <mat-card class="card color-green">
+    <div>
+      <div class=" card-container" style="float: left;">
+        <mat-card class="card color-green" [routerLink]="['/profile', 0]">
           <mat-card-header>
             <mat-card-title class="color-white">Soy Propietario</mat-card-title>
           </mat-card-header>
         </mat-card>
       </div>
-    </mat-grid-tile>
-
-    <mat-grid-tile colspan="1" rowspan="1">
-      <div class=" card-container">
-        <mat-card class="card color-green">
+      <div class=" card-container" style="float: left;">
+        <mat-card class="card color-green" [routerLink]="['/profile', 0]">
           <mat-card-header>
             <mat-card-title class="color-white">Soy Empleado</mat-card-title>
           </mat-card-header>
         </mat-card>
       </div>
-    </mat-grid-tile>
-
-  </mat-grid-list>
+    </div>
+  </div>
 </div>

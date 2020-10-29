@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
+import { LoginOwnerComponent } from './components/login-owner/login-owner.component';
 import { AuthService } from './services/auth.service';
 
 @NgModule({
@@ -24,6 +25,7 @@ import { AuthService } from './services/auth.service';
     AppComponent,
     HomepageComponent,
     ProfileComponent,
+    LoginOwnerComponent,
     LoginEmlpoyeeComponent
   ],
   imports: [
@@ -41,8 +43,6 @@ import { AuthService } from './services/auth.service';
     MatCardModule,
     MatToolbarModule,
     MatGridListModule,
-    MatFormFieldModule,
-    MatInputModule,
     HttpClientModule
   ],
   providers: [AuthService],

@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormGroupDirective,
+  NgForm,
+  Validators,
+} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -39,7 +45,7 @@ export class LoginEmlpoyeeComponent implements OnInit {
       ]),
       passwordFormControl: new FormControl('', [
         Validators.required,
-        Validators.minLength(8),
+        Validators.minLength(4),
       ]),
     });
   }
@@ -49,12 +55,13 @@ export class LoginEmlpoyeeComponent implements OnInit {
   async login() {
     const login = {
       email: this.loginEmployeeForm.get('emailFormControl').value,
-      password: this.loginEmployeeForm.get('passwordFormControl').value
-    }
+      password: this.loginEmployeeForm.get('passwordFormControl').value,
+    };
 
     await this.apiService.getUser(login).then(
       (data) => {
         if (data) {
+          console.log('Token adquirido!');
           this.user = data;
           // if (this.user) {
           //   sessionStorage.setItem('id', this.user.id);
@@ -65,27 +72,32 @@ export class LoginEmlpoyeeComponent implements OnInit {
             icon: 'success',
             text: 'Ingresando...',
             showConfirmButton: true,
-            confirmButtonColor: '#34c4b7'
+            confirmButtonColor: '#34c4b7',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.router.navigate(['profile', 0]);
+            }
+          });
+        }
+      },
+      (error) => {
+        if (error.status == 401) {
+          Swal.fire({
+            icon: 'warning',
+            text: 'Los datos ingresados son erróneos.',
+            showConfirmButton: true,
+            confirmButtonColor: '#34c4b7',
           });
         } else {
           Swal.fire({
             icon: 'warning',
             text: 'Ha ocurrido un problema, intentelo más tarde.',
             showConfirmButton: true,
-            confirmButtonColor: '#34c4b7'
+            confirmButtonColor: '#34c4b7',
           });
         }
-      }, (error) => {
         console.error(error);
       }
     );
-    // esto esta mientras se organiza bien el consumo del endpoint
-    Swal.fire({
-      icon: 'warning',
-      text: 'Los datos ingresados son erróneos.',
-      showConfirmButton: true,
-      confirmButtonColor: '#34c4b7'
-    });
   }
-
 }

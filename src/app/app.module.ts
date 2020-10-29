@@ -15,14 +15,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
-    ProfileComponent
+    ProfileComponent,
+    LoginEmlpoyeeComponent
   ],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -37,6 +43,6 @@ import { ProfileComponent } from './components/profile/profile.component';
     MatInputModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

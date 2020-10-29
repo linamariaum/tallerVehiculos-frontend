@@ -1,0 +1,46 @@
+<div>
+  <mat-card class="container mat-elevation-z5" *ngIf="true">
+    <mat-card-header>
+      <mat-card-title class="title color-white">Iniciar sesión</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="example-form" [formGroup]="loginEmployeeForm">
+        <mat-form-field class="example-full-width">
+          <mat-label>Correo electrónico</mat-label>
+          <input
+            matInput
+            required
+            formControlName="emailFormControl"
+            type="email"
+            [errorStateMatcher]="matcher"
+            placeholder="Ex. pat@example.com"
+          />
+          <!-- <mat-error
+      *ngIf="
+      loginEmployeeForm.emailFormControl.hasError('email') &&
+        !loginEmployeeForm.emailFormControl.hasError('required')
+      "
+    >
+      Please enter a valid email address
+    </mat-error>
+    <mat-error *ngIf="emailFormControl.hasError('required')">
+      Email is <strong>required</strong>
+    </mat-error> -->
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            required
+            formControlName="passwordFormControl"
+            type="password"
+          />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <mat-card-actions align="center">
+      <button mat-button class="color-blue" type="submit">Aceptar</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

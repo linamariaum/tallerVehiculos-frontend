@@ -12,10 +12,12 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -40,9 +42,10 @@ import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoy
     MatToolbarModule,
     MatGridListModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

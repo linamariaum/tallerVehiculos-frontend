@@ -1,0 +1,53 @@
+<div>
+  <mat-card class="container mat-elevation-z5" style="width: 20%">
+    <mat-card-header>
+      <mat-card-title class="title color-white">Iniciar sesión</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form
+        *ngIf="!waitingToken"
+        class="example-form"
+        [formGroup]="loginOwnerForm"
+        (ngSubmit)="sendToken(loginOwnerForm)"
+      >
+        <mat-form-field class="example-full-width">
+          <mat-label>Correo electrónico</mat-label>
+          <input
+            matInput
+            required
+            formControlName="emailFormControl"
+            type="email"
+            placeholder="Ex. pat@example.com"
+          />
+        </mat-form-field>
+        <div align="center">
+          <button align="center" mat-button class="color-blue" type="submit">
+            Enviar token
+          </button>
+        </div>
+      </form>
+
+      <form
+        *ngIf="waitingToken"
+        class="example-form"
+        [formGroup]="loginOwnerForm"
+        (ngSubmit)="login(loginOwnerForm)"
+      >
+        <mat-form-field class="example-full-width">
+          <mat-label>Token</mat-label>
+          <input
+            matInput
+            required
+            formControlName="tokenFormControl"
+            type="password"
+          />
+        </mat-form-field>
+        <div align="center">
+          <button align="center" mat-button class="color-blue" type="submit">
+            Aceptar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -7,42 +7,37 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
   sub: Subscription;
   edit = true;
   employee = {
-    name: 'Lina María Uribe Montoya',
-    userName: 'lina.uribem',
-    email: 'lina.uribem@udea.edu.co',
-    cellphone: '3215680774',
-    password: 'cosa12345678'
+    name: 'danielJaramillo',
+    email: 'dani@gmail.com',
+    cellphone: '3214444444',
+    password: '1234',
   };
   profileForm = new FormGroup({
-    cellphoneFormControl: new FormControl({value: this.employee.cellphone, disabled: true}, [
-      Validators.required,
-      Validators.minLength(7),
-      Validators.maxLength(10)
-    ]),
-    emailFormControl: new FormControl({value: this.employee.email, disabled: true}, [
-      Validators.required,
-      Validators.email
-    ]),
+    cellphoneFormControl: new FormControl(
+      { value: this.employee.cellphone, disabled: true },
+      [Validators.required, Validators.minLength(7), Validators.maxLength(10)]
+    ),
+    emailFormControl: new FormControl(
+      { value: this.employee.email, disabled: true },
+      [Validators.required, Validators.email]
+    ),
     passwordFormControl: new FormControl('', [
       Validators.required,
-      Validators.minLength(8)
+      Validators.minLength(8),
     ]),
-    confirmFormControl: new FormControl('', [
-      Validators.required,
-      ])
+    confirmFormControl: new FormControl('', [Validators.required]),
   });
 
-  constructor(private route: ActivatedRoute,
-    private router: Router) { }
+  constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
-    this.sub = this.route.params.subscribe(params => {
+    this.sub = this.route.params.subscribe((params) => {
       const id = params['id'];
       if (id) {
         // Recuperar usuario por id
@@ -72,5 +67,4 @@ export class ProfileComponent implements OnInit {
   save() {
     this.profileForm.disable();
   }
-
 }

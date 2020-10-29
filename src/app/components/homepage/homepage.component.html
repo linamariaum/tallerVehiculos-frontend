@@ -1,38 +1,41 @@
 <div class="background">
   <div class="container">
-    <br><br>
-    <div class="color-green-ligth" style="float: left; padding: 2rem; opacity: 90%;">
-      <h1 class="color-white" style="text-align: center;">Nuestros servicios</h1>
-      <div style="float: left;">
+    <br /><br />
+    <div
+      class="color-green-ligth"
+      style="float: left; padding: 2rem; opacity: 90%"
+    >
+      <h1 class="color-white" style="text-align: center">Nuestros servicios</h1>
+      <div style="float: left">
         <h3><b>Mecánica:</b></h3>
         <ul *ngFor="let item of mechanics">
-          <li>{{item}}</li>
+          <li>{{ item }}</li>
         </ul>
       </div>
-      <div style="float: left;">
+      <div style="float: left">
         <h3><b>Revisión automotriz:</b></h3>
         <ul *ngFor="let item of reviews">
-          <li>{{item}}</li>
+          <li>{{ item }}</li>
         </ul>
       </div>
-      <div style="float: left;">
+      <div style="float: left">
         <h3><b>Estética automotriz:</b></h3>
         <ul *ngFor="let item of esthetic">
-          <li>{{item}}</li>
+          <li>{{ item }}</li>
         </ul>
       </div>
     </div>
 
     <div>
-      <div class=" card-container" style="float: left;">
-        <mat-card class="card color-green" [routerLink]="['/profile', 0]">
+      <div class="card-container" style="float: left">
+        <mat-card class="card color-green" [routerLink]="['/login-owner']">
           <mat-card-header>
             <mat-card-title class="color-white">Soy Propietario</mat-card-title>
           </mat-card-header>
         </mat-card>
       </div>
-      <div class=" card-container" style="float: left;">
-        <mat-card class="card color-green" [routerLink]="['/profile', 0]">
+      <div class="card-container" style="float: left">
+        <mat-card class="card color-green" [routerLink]="['/login-emlpoyee']">
           <mat-card-header>
             <mat-card-title class="color-white">Soy Empleado</mat-card-title>
           </mat-card-header>

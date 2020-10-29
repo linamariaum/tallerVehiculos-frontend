@@ -12,17 +12,27 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
+import { LoginOwnerComponent } from './components/login-owner/login-owner.component';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomepageComponent,
-    ProfileComponent
+    ProfileComponent,
+    LoginOwnerComponent,
+    LoginEmlpoyeeComponent
   ],
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -33,10 +43,9 @@ import { ProfileComponent } from './components/profile/profile.component';
     MatCardModule,
     MatToolbarModule,
     MatGridListModule,
-    MatFormFieldModule,
-    MatInputModule
+    HttpClientModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [AuthService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

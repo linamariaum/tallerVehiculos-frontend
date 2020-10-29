@@ -1,0 +1,56 @@
+<div>
+  <mat-card class="container mat-elevation-z5">
+    <mat-card-header>
+      <mat-card-title class="title color-white">Iniciar sesión</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <br>
+      <form class="example-form" [formGroup]="loginEmployeeForm">
+        <mat-form-field class="example-full-width">
+          <mat-label>Correo electrónico</mat-label>
+          <input
+            matInput
+            required
+            formControlName="emailFormControl"
+            type="email"
+            [errorStateMatcher]="matcher"
+            placeholder="Ex. pat@example.com"
+          />
+          <mat-error *ngIf="loginEmployeeForm.get('emailFormControl').hasError('email') &&
+            !loginEmployeeForm.get('emailFormControl').hasError('required')">
+            Por favor ingrese un correo electrónico válido
+          </mat-error>
+          <mat-error *ngIf="loginEmployeeForm.get('emailFormControl').hasError('required')">
+            El correo electónico es <strong>requerido</strong>
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            required
+            formControlName="passwordFormControl"
+            type="password"
+          />
+          <mat-error *ngIf="loginEmployeeForm.get('passwordFormControl').hasError('required')">
+            La contraseña es <strong>requerida</strong>
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+    <br>
+    <p>*Se habilitará el botón de aceptar cuando diligencie correctamente los campos.</p>
+    <br>
+    <mat-card-actions align="center">
+      <ng-container *ngIf="!loginEmployeeForm.invalid;else groupInvalid">
+        <button mat-button [disabled]="loginEmployeeForm.invalid" class="color-blue"
+        (click)="login()" type="submit">Aceptar</button>
+      </ng-container>
+      <ng-template #groupInvalid>
+        <button mat-button style="color:#505853; background-color: rgba(248, 237, 237, 0.589);"
+        [disabled]="loginEmployeeForm.invalid">Aceptar</button>
+      </ng-template>
+    </mat-card-actions>
+  </mat-card>
+</div>

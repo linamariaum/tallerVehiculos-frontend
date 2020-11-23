@@ -4,13 +4,15 @@ import { LoginOwnerComponent } from './components/login-owner/login-owner.compon
 import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { EmployeeTechnicalComponent } from './components/employee-technical/employee-technical.component';
 
 const routes: Routes = [
+  { path: 'emlpoyee-technical', component: EmployeeTechnicalComponent },
   { path: 'login-owner', component: LoginOwnerComponent },
   { path: 'login-emlpoyee', component: LoginEmlpoyeeComponent },
   { path: 'homepage', component: HomepageComponent },
   { path: 'profile/:id', component: ProfileComponent },
-  { path: '**', pathMatch: 'full', redirectTo: 'homepage' }
+  { path: '**', pathMatch: 'full', redirectTo: 'homepage' },
 ];
 
 @NgModule({

@@ -4,8 +4,10 @@ import { LoginOwnerComponent } from './components/login-owner/login-owner.compon
 import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { EmployeeAssistantComponent } from './components/employee-assistant/employee-assistant.component';
 
 const routes: Routes = [
+  { path: 'employee-assistant/:id', component: EmployeeAssistantComponent },
   { path: 'login-owner', component: LoginOwnerComponent },
   { path: 'login-emlpoyee', component: LoginEmlpoyeeComponent },
   { path: 'homepage', component: HomepageComponent },

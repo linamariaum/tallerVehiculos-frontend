@@ -19,6 +19,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
 import { LoginOwnerComponent } from './components/login-owner/login-owner.component';
 import { AuthService } from './services/auth.service';
+import { EmployeeAssistantComponent } from './components/employee-assistant/employee-assistant.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { AuthService } from './services/auth.service';
     HomepageComponent,
     ProfileComponent,
     LoginOwnerComponent,
-    LoginEmlpoyeeComponent
+    LoginEmlpoyeeComponent,
+    EmployeeAssistantComponent
   ],
   imports: [
     FormsModule,

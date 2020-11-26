@@ -10,7 +10,6 @@
 
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
-    <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox
@@ -32,25 +31,21 @@
       </td>
     </ng-container>
 
-    <!-- Position Column -->
     <ng-container matColumnDef="Placa">
       <th mat-header-cell *matHeaderCellDef>Placa</th>
       <td mat-cell *matCellDef="let element">{{ element.Placa }}</td>
     </ng-container>
 
-    <!-- Name Column -->
     <ng-container matColumnDef="Marca">
       <th mat-header-cell *matHeaderCellDef>Marca</th>
       <td mat-cell *matCellDef="let element">{{ element.Marca }}</td>
     </ng-container>
 
-    <!-- Weight Column -->
     <ng-container matColumnDef="Modelo">
       <th mat-header-cell *matHeaderCellDef>Modelo</th>
       <td mat-cell *matCellDef="let element">{{ element.Modelo }}</td>
     </ng-container>
 
-    <!-- Symbol Column -->
     <ng-container matColumnDef="Color">
       <th mat-header-cell *matHeaderCellDef>Color</th>
       <td mat-cell *matCellDef="let element">{{ element.Color }}</td>
@@ -89,8 +84,20 @@
             </span>
           </div>
           <div class="example-button-row">
-            <button mat-raised-button class="color-blue">Actualizar</button>
-            <button mat-raised-button class="color-green">Eliminar</button>
+            <button
+              mat-raised-button
+              (click)="updateData(element)"
+              class="color-blue"
+            >
+              Actualizar
+            </button>
+            <button
+              mat-raised-button
+              (click)="delteThisRow(element)"
+              class="color-green"
+            >
+              Eliminar
+            </button>
           </div>
         </div>
       </td>
@@ -121,6 +128,10 @@
 </div>
 
 <div class="example-button-row">
-  <button mat-raised-button class="color-blue">Crear</button>
-  <button mat-raised-button class="color-green">Eliminar</button>
+  <button mat-raised-button (click)="addData()" class="color-blue">
+    Crear
+  </button>
+  <button mat-raised-button (click)="deleteData()" class="color-green">
+    Eliminar
+  </button>
 </div>

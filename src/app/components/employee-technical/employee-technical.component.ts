@@ -10,6 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-employee-technical',
@@ -30,7 +31,7 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource(ELEMENT_DATA);
   columnsToDisplay: string[] = ['select', 'Placa', 'Marca', 'Modelo', 'Color'];
   expandedElement: PeriodicElement | null;
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  selection: any = new SelectionModel<PeriodicElement>(true, []);
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -73,6 +74,163 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
     }
   }
 
+  addData() {
+    Swal.mixin({
+      title: 'Nuevo vehículo',
+      showCancelButton: true,
+      confirmButtonText: 'Next &rarr;',
+      progressSteps: ['1', '2', '3', '4', '5'],
+    })
+      .queue([
+        {
+          text: 'Placa',
+          input: 'text',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Es necesario escribir algo!';
+            }
+          },
+        },
+        {
+          text: 'Marca',
+          input: 'text',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Es necesario escribir algo!';
+            }
+          },
+        },
+        {
+          text: 'Modelo',
+          input: 'text',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Es necesario escribir algo!';
+            }
+          },
+        },
+        {
+          text: 'Color',
+          input: 'text',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Es necesario escribir algo!';
+            }
+          },
+        },
+        {
+          text: 'Estado',
+          input: 'text',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Es necesario escribir algo!';
+            }
+          },
+        },
+      ])
+      .then((result: any) => {
+        if (result.value) {
+          this.dataSource.data.push({
+            Placa: result.value[0],
+            Marca: result.value[1],
+            Modelo: result.value[2],
+            Color: result.value[3],
+            Estado: result.value[4],
+          });
+          return (this.dataSource.filter = '');
+        }
+      });
+  }
+
+  deleteData() {
+    for (var j = 0; j < this.selection._selected.length; j++) {
+      var i = this.dataSource.data.indexOf(this.selection._selected[j]);
+      this.dataSource.data.splice(i, 1);
+    }
+    return (this.dataSource.filter = '');
+  }
+
+  delteThisRow(element) {
+    var i = this.dataSource.data.indexOf(element);
+    this.dataSource.data.splice(i, 1);
+    return (this.dataSource.filter = '');
+  }
+
+  updateData(element) {
+    Swal.mixin({
+      title: 'Actualizar vehículo',
+      showCancelButton: true,
+      confirmButtonText: 'Next &rarr;',
+      progressSteps: ['1', '2', '3', '4', '5'],
+    })
+      .queue([
+        {
+          text: 'Placa',
+          input: 'text',
+        },
+        {
+          text: 'Marca',
+          input: 'text',
+        },
+        {
+          text: 'Modelo',
+          input: 'text',
+        },
+        {
+          text: 'Color',
+          input: 'text',
+        },
+        {
+          text: 'Estado',
+          input: 'text',
+        },
+      ])
+      .then((result: any) => {
+        if (result.value) {
+          if (
+            !(
+              !result.value[0] &&
+              !result.value[1] &&
+              !result.value[2] &&
+              !result.value[3] &&
+              !result.value[4]
+            )
+          ) {
+            var data: any = {};
+            if (result.value[0]) {
+              data.Placa = result.value[0];
+            } else {
+              data.Placa = element.Placa;
+            }
+            if (result.value[1]) {
+              data.Marca = result.value[1];
+            } else {
+              data.Marca = element.Marca;
+            }
+            if (result.value[2]) {
+              data.Modelo = result.value[2];
+            } else {
+              data.Modelo = element.Modelo;
+            }
+            if (result.value[3]) {
+              data.Color = result.value[3];
+            } else {
+              data.Color = element.Color;
+            }
+            if (result.value[4]) {
+              data.Estado = result.value[4];
+            } else {
+              data.Estado = element.Estado;
+            }
+
+            var i = this.dataSource.data.indexOf(element);
+            this.dataSource.data[i] = data;
+            return (this.dataSource.filter = '');
+          }
+        }
+      });
+  }
+
   constructor() {}
 
   ngOnInit(): void {}
@@ -92,69 +250,20 @@ const ELEMENT_DATA: PeriodicElement[] = [
     Marca: 'Tesla',
     Modelo: '2001',
     Color: 'Blanco',
-    Estado: `Malo`,
+    Estado: 'Malo',
   },
   {
     Placa: 'h1',
     Marca: 'h1',
     Modelo: 'h1',
     Color: 'h1',
-    Estado: `h1`,
-  },
-  {
-    Placa: 'h2',
-    Marca: 'h2',
-    Modelo: 'h2',
-    Color: 'h2',
-    Estado: `h2`,
-  },
-  {
-    Placa: 'h3',
-    Marca: 'h3',
-    Modelo: 'h3',
-    Color: 'h3',
-    Estado: `h3`,
-  },
-  {
-    Placa: 'h4',
-    Marca: 'h4',
-    Modelo: 'h4',
-    Color: 'h4',
-    Estado: `h4`,
-  },
-  {
-    Placa: 'h5',
-    Marca: 'h5',
-    Modelo: 'h5',
-    Color: 'h5',
-    Estado: `h5`,
+    Estado: 'h1',
   },
   {
     Placa: 'h6',
     Marca: 'h6',
     Modelo: 'h6',
     Color: 'h6',
-    Estado: `h6`,
-  },
-  {
-    Placa: 'h7',
-    Marca: 'h7',
-    Modelo: 'h7',
-    Color: 'h7',
-    Estado: `h7`,
-  },
-  {
-    Placa: 'h8',
-    Marca: 'h8',
-    Modelo: 'h8',
-    Color: 'h8',
-    Estado: `h8`,
-  },
-  {
-    Placa: 'h9',
-    Marca: 'h9',
-    Modelo: 'h9',
-    Color: 'h9',
-    Estado: `h9`,
+    Estado: 'h6',
   },
 ];

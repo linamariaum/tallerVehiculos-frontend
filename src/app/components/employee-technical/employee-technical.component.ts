@@ -11,6 +11,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import Swal from 'sweetalert2';
+import { Vehicle } from 'src/app/models/vehicle';
+import { VehicleService } from 'src/app/services/vehicle.service';
 
 @Component({
   selector: 'app-employee-technical',
@@ -28,10 +30,40 @@ import Swal from 'sweetalert2';
   ],
 })
 export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  Vehicles: Vehicle[] = [
+    {
+      id: '1',
+      Placa: 'MMI132',
+      Marca: 'Tesla',
+      Modelo: '2001',
+      Color: 'Blanco',
+      Estado: 'Malo',
+      Tipo: 'Moto',
+    },
+    {
+      id: '4',
+      Placa: 'h1',
+      Marca: 'h1',
+      Modelo: 'h1',
+      Color: 'h1',
+      Estado: 'h1',
+      Tipo: 'Moto',
+    },
+    {
+      id: '11',
+      Placa: 'h6',
+      Marca: 'h6',
+      Modelo: 'h6',
+      Color: 'h6',
+      Estado: 'h6',
+      Tipo: 'Moto',
+    },
+  ];
+  // dataSource: MatTableDataSource<Vehicle>;
+  dataSource = new MatTableDataSource(this.Vehicles);
   columnsToDisplay: string[] = ['select', 'Placa', 'Marca', 'Modelo', 'Color'];
-  expandedElement: PeriodicElement | null;
-  selection: any = new SelectionModel<PeriodicElement>(true, []);
+  expandedElement: Vehicle | null;
+  selection: any = new SelectionModel<Vehicle>(true, []);
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
@@ -48,7 +80,7 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
+  checkboxLabel(row?: Vehicle): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
@@ -79,7 +111,7 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
       title: 'Nuevo vehículo',
       showCancelButton: true,
       confirmButtonText: 'Next &rarr;',
-      progressSteps: ['1', '2', '3', '4', '5'],
+      progressSteps: ['1', '2', '3', '4', '5', '6'],
     })
       .queue([
         {
@@ -127,15 +159,26 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
             }
           },
         },
+        {
+          text: 'Tipo',
+          input: 'text',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Es necesario escribir algo!';
+            }
+          },
+        },
       ])
       .then((result: any) => {
         if (result.value) {
           this.dataSource.data.push({
+            id: '0',
             Placa: result.value[0],
             Marca: result.value[1],
             Modelo: result.value[2],
             Color: result.value[3],
             Estado: result.value[4],
+            Tipo: result.value[5],
           });
           return (this.dataSource.filter = '');
         }
@@ -161,7 +204,7 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
       title: 'Actualizar vehículo',
       showCancelButton: true,
       confirmButtonText: 'Next &rarr;',
-      progressSteps: ['1', '2', '3', '4', '5'],
+      progressSteps: ['1', '2', '3', '4', '5', '6'],
     })
       .queue([
         {
@@ -184,6 +227,10 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
           text: 'Estado',
           input: 'text',
         },
+        {
+          text: 'Tipo',
+          input: 'text',
+        },
       ])
       .then((result: any) => {
         if (result.value) {
@@ -193,7 +240,8 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
               !result.value[1] &&
               !result.value[2] &&
               !result.value[3] &&
-              !result.value[4]
+              !result.value[4] &&
+              !result.value[5]
             )
           ) {
             var data: any = {};
@@ -222,6 +270,12 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
             } else {
               data.Estado = element.Estado;
             }
+            if (result.value[5]) {
+              data.Tipo = result.value[5];
+            } else {
+              data.Tipo = element.Tipo;
+            }
+            data.id = element.id;
 
             var i = this.dataSource.data.indexOf(element);
             this.dataSource.data[i] = data;
@@ -231,39 +285,19 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
       });
   }
 
-  constructor() {}
+  constructor(private APIVehicle: VehicleService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.APIVehicle.getVehicles().then(
+      (data) => {
+        if (data && data.length > 0) {
+          this.Vehicles = data;
+          this.dataSource = new MatTableDataSource(this.Vehicles);
+        }
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+  }
 }
-
-export interface PeriodicElement {
-  Placa: string;
-  Marca: string;
-  Modelo: string;
-  Color: string;
-  Estado: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    Placa: 'MMI132',
-    Marca: 'Tesla',
-    Modelo: '2001',
-    Color: 'Blanco',
-    Estado: 'Malo',
-  },
-  {
-    Placa: 'h1',
-    Marca: 'h1',
-    Modelo: 'h1',
-    Color: 'h1',
-    Estado: 'h1',
-  },
-  {
-    Placa: 'h6',
-    Marca: 'h6',
-    Modelo: 'h6',
-    Color: 'h6',
-    Estado: 'h6',
-  },
-];

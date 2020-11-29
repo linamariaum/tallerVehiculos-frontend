@@ -63,11 +63,9 @@ export class LoginEmlpoyeeComponent implements OnInit {
         if (data) {
           console.log('Token adquirido!');
           this.user = data;
-          // if (this.user) {
-          //   sessionStorage.setItem('id', this.user.id);
-          //   sessionStorage.setItem('name', this.user.name);
-          //   sessionStorage.setItem('userName', this.user.userName);
-          // }
+          if (this.user) {
+            sessionStorage.setItem('id', this.user.id.toString());
+          }
           Swal.fire({
             icon: 'success',
             text: 'Ingresando...',
@@ -75,7 +73,20 @@ export class LoginEmlpoyeeComponent implements OnInit {
             confirmButtonColor: '#34c4b7',
           }).then((result) => {
             if (result.isConfirmed) {
-              this.router.navigate(['profile', 0]);
+              switch (this.user.role.id) {
+                case 1:
+                  this.router.navigate(['employee-assistant', this.user.id]);
+                  break;
+                case 2:
+                  this.router.navigate(['employee-assistant', this.user.id]);
+                  break;
+                case 3:
+                  this.router.navigate(['emlpoyee-technical', this.user.id]);
+                  break;
+                default:
+                  this.router.navigate(['/homepage']);
+                  break;
+              }
             }
           });
         }

@@ -1,8 +1,14 @@
+<div class="container">
+  <h2 align="end">Hola! Usuario</h2>
+  <button mat-raised-button (click)="profile()" class="color-blue">
+    <mat-icon>account_box</mat-icon> Ver mi perfil
+  </button>
+</div>
 <div class="container" >
   <div class="example-button-row">
     <h2>Gestionar empleados</h2>
     <div align="end">
-      <button mat-raised-button (click)="addEmployee()" class="color-blue">
+      <button mat-raised-button (click)="add()" class="color-blue">
         <mat-icon>person_add</mat-icon> Agregar empleado
       </button>
       <button mat-raised-button (click)="deleteSelectedEmployees()" class="color-green"

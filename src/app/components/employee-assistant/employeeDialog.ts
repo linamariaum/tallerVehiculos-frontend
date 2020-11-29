@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NewEmployeeRequests } from 'src/app/models/dataRequests/newEmployee';
 import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmployee';
 import { Role } from 'src/app/models/role';
-import { EmployeeService } from 'src/app/services/employee.service';
+import { RoleService } from 'src/app/services/role.service';
 
 @Component({
   selector: 'employee-dialog',
@@ -24,9 +24,13 @@ export class EmployeeDialog implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<EmployeeDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private employeeService: EmployeeService) {}
+    private roleService: RoleService) {}
 
   ngOnInit() {
+    this.roleService.getAll().subscribe(data => {
+      const datos = data;
+      this.roles = datos;
+    });
     if (this.data.type === 'create') {
       this.title = 'Nueva vinculación';
       this.editField = false;
@@ -50,7 +54,7 @@ export class EmployeeDialog implements OnInit {
           [Validators.required, Validators.minLength(7), Validators.maxLength(10)]),
         emailInput: new FormControl({ value: this.data.employee.email, disabled: true }, Validators.required),
         roleInput: new FormControl(
-          { value: this.data.employee.role.id ? this.data.employee.role.id : '', disabled: true },
+          { value: this.data.employee.role.id ? this.data.employee.role.id : '', disabled: false },
           Validators.required),
         passwordInput: new FormControl('', [Validators.minLength(4)]),
         newPasswordInput: new FormControl({ value: '', disabled: true }, [Validators.minLength(4)])
@@ -86,14 +90,15 @@ export class EmployeeDialog implements OnInit {
       this.data.employee = newEmployee;
 
     } else if (this.data.type === 'update') {
-      const updatePassword: UpdateEmployeeRequests =
+      const updateInfo: UpdateEmployeeRequests =
       {
         id: this.data.employee.id,
         cellphone: this.groupControl.get('cellphoneInput').value,
         password: this.groupControl.get('passwordInput').value,
-        newPassword: this.groupControl.get('newPasswordInput').value
+        newPassword: this.groupControl.get('newPasswordInput').value,
+        roleId: +this.groupControl.get('roleInput').value
       }
-      this.data.employee = updatePassword;
+      this.data.employee = updateInfo;
     }
   }
 

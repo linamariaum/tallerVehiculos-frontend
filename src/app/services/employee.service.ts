@@ -32,11 +32,9 @@ export class EmployeeService {
       .toPromise();
   }
 
-  async getEmployee(id: string): Promise<Employee> {
-    return await this.http
-      .get<Employee>(this.urlApi + '/' + id)
-      .pipe(retry(1), catchError(this.handleError))
-      .toPromise();
+  async getEmployee(id: string) {
+    return this.http
+      .get(this.urlApi + '/' + id);
   }
 
   async createEmployee(employee: NewEmployeeRequests): Promise<any> {

@@ -13,6 +13,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { EmployeeDialog } from './employeeDialog';
 import { NewEmployeeRequests } from 'src/app/models/dataRequests/newEmployee';
 import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmployee';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProfileDialog } from '../profile/profileDialog';
+import { RoleService } from 'src/app/services/role.service';
 
 @Component({
   selector: 'app-employee-assistant',
@@ -30,6 +34,19 @@ import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmploy
   ],
 })
 export class EmployeeAssistantComponent implements OnInit {
+    userEmployee: Employee = {
+      id: 6,
+      password: 'MMI132',
+      name: 'Asis Perez',
+      registryDate: '2001',
+      email: 'asis@email.com',
+      removalDate: 'Malo',
+      cellphone: '2342342376',
+      role: {
+        id: 1,
+        name: 'Asistente de gerencia'
+      }
+    };
     employees: Employee[];
     dataSource: MatTableDataSource<Employee>;
     columnsToDisplay: string[] = ['select', 'name', 'email', 'cellphone', 'role'];
@@ -44,16 +61,65 @@ export class EmployeeAssistantComponent implements OnInit {
       { id: 2, name: 'Supervisor' },
       { id: 3, name: 'Técnico' }
     ];
+    sub: Subscription;
 
-  constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService, public employeeDialog: MatDialog) { }
+  constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService, public employeeDialog: MatDialog,
+    private route: ActivatedRoute, private router: Router, private roleService: RoleService) { }
 
   async ngOnInit() {
+
+    // INICIO COSA DESECHABLE
+    const prueba = 0;
+    sessionStorage.setItem('id', prueba.toString());
+    // FIN COSA DESECHABLE
+
+    this.sub = this.route.params.subscribe(async params => {
+      const id = params['id'];
+      if (id && id === sessionStorage.getItem('id')) {
+        this.roleService.getAll().subscribe(data => {
+          const datos = data;
+          this.roles = datos;
+        });
+    //     (await this.employeeService.getEmployee(id)).subscribe((user: Employee) => {
+    //       if (user) {
+    //         this.userEmployee = user;
+    //       } else {
+    //         Swal.fire({
+    //           icon: 'error',
+    //           title: 'Oops...',
+    //           text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+    //           showConfirmButton: true,
+    //           confirmButtonColor: '#34c4b7',
+    //         });
+    //         this.router.navigate(['/homepage']);
+    //       }
+    //     }, error => {
+    //       console.error(error)
+    //       this.errorService();
+    //       this.router.navigate(['/homepage']);
+    //     });
+
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+          showConfirmButton: true,
+          confirmButtonColor: '#34c4b7',
+        });
+        this.router.navigate(['/homepage']);
+      }
+    });
     this.control = this.formBuilder.group({
       controlRole: ['']
     });
     await this.loadEmployees();
     this.init(this.employees);
     this.onChanges();
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
   }
 
   init(datos: Employee[]) {
@@ -155,13 +221,30 @@ export class EmployeeAssistantComponent implements OnInit {
             }
           },
         ];
-        this.spinner = false; // COSA DESECHABLE
+        this.spinner = false;
         this.errorService();
       }
     );
   }
 
-  addEmployee() {
+  profile() {
+    this.openProfileDialog(this.userEmployee);
+  }
+
+  openProfileDialog(employee: Employee) {
+    const dialogRef = this.employeeDialog.open(ProfileDialog, {
+      data: { employee: employee}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log(result.employee); // COSA DESECHABLE
+        this.spinner = true;
+        this.updateEmployee(result.employee);
+      }
+    });
+  }
+
+  add() {
     let empl: NewEmployeeRequests = {
       password: '',
       name: '',
@@ -210,6 +293,7 @@ export class EmployeeAssistantComponent implements OnInit {
       }, (error) => {
         console.error(error);
         this.errorService();
+        this.spinner = false;
       }
     );
   }
@@ -230,6 +314,7 @@ export class EmployeeAssistantComponent implements OnInit {
       }, (error) => {
         console.error(error);
         this.errorService();
+        this.spinner = false;
       }
     );
   }

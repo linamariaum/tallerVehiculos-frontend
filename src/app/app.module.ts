@@ -13,6 +13,14 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -20,6 +28,7 @@ import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoy
 import { LoginOwnerComponent } from './components/login-owner/login-owner.component';
 import { AuthService } from './services/auth.service';
 import { EmployeeAssistantComponent } from './components/employee-assistant/employee-assistant.component';
+import { EmployeeDialog } from './components/employee-assistant/employeeDialog';
 
 @NgModule({
   declarations: [
@@ -28,9 +37,17 @@ import { EmployeeAssistantComponent } from './components/employee-assistant/empl
     ProfileComponent,
     LoginOwnerComponent,
     LoginEmlpoyeeComponent,
-    EmployeeAssistantComponent
+    EmployeeAssistantComponent,
+    EmployeeDialog
+  ],
+  entryComponents: [
+    EmployeeDialog
   ],
   imports: [
+    MatCheckboxModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatTableModule,
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -45,7 +62,11 @@ import { EmployeeAssistantComponent } from './components/employee-assistant/empl
     MatCardModule,
     MatToolbarModule,
     MatGridListModule,
-    HttpClientModule
+    HttpClientModule,
+    MatIconModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent],

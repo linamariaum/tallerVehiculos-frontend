@@ -5,8 +5,8 @@ export class Employee {
   name: string;
   password: string;
   email: string;
-  cellphone: number;
-  registryDate: Date;
-  removalDate: Date;
+  cellphone: string;
+  registryDate: string;
+  removalDate: string;
   role: Role;
 }

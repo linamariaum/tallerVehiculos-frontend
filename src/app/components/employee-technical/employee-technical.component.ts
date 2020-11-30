@@ -30,46 +30,22 @@ import { VehicleService } from 'src/app/services/vehicle.service';
   ],
 })
 export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
-  Vehicles: Vehicle[] = [
-    {
-      id: '1',
-      Placa: 'MMI132',
-      Marca: 'Tesla',
-      Modelo: '2001',
-      Color: 'Blanco',
-      Estado: 'Malo',
-      Tipo: 'Moto',
-    },
-    {
-      id: '4',
-      Placa: 'h1',
-      Marca: 'h1',
-      Modelo: 'h1',
-      Color: 'h1',
-      Estado: 'h1',
-      Tipo: 'Moto',
-    },
-    {
-      id: '11',
-      Placa: 'h6',
-      Marca: 'h6',
-      Modelo: 'h6',
-      Color: 'h6',
-      Estado: 'h6',
-      Tipo: 'Moto',
-    },
-  ];
-  // dataSource: MatTableDataSource<Vehicle>;
-  dataSource = new MatTableDataSource(this.Vehicles);
-  columnsToDisplay: string[] = ['select', 'Placa', 'Marca', 'Modelo', 'Color'];
+  states: any[] = [];
+  vehicleTypes: any[] = [];
+  Vehicles: Vehicle[] = [];
+
+  dataSource: MatTableDataSource<Vehicle> = null;
+  columnsToDisplay: string[] = ['select', 'plate', 'brand', 'model', 'color'];
   expandedElement: Vehicle | null;
   selection: any = new SelectionModel<Vehicle>(true, []);
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    if (this.dataSource) {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.data.length;
+      return numSelected === numRows;
+    }
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
@@ -85,7 +61,7 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row.Placa
+      row.plate
     }`;
   }
 
@@ -93,8 +69,10 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
   }
 
   applyFilter(event: Event) {
@@ -152,51 +130,100 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
         },
         {
           text: 'Estado',
-          input: 'text',
+          input: 'select',
+          inputOptions: this.getStates(),
+          inputPlaceholder: 'Seleccionar un estado',
+          showCancelButton: true,
           inputValidator: (value) => {
             if (!value) {
-              return 'Es necesario escribir algo!';
+              return 'Es necesario elegir algo!';
             }
           },
         },
         {
-          text: 'Tipo',
-          input: 'text',
+          text: 'Tipo de vehículo',
+          input: 'select',
+          inputOptions: this.getVehicleTypes(),
+          inputPlaceholder: 'Seleccionar un tipo de vehículo',
+          showCancelButton: true,
           inputValidator: (value) => {
             if (!value) {
-              return 'Es necesario escribir algo!';
+              return 'Es necesario elegir algo!';
             }
           },
         },
       ])
       .then((result: any) => {
         if (result.value) {
-          this.dataSource.data.push({
-            id: '0',
-            Placa: result.value[0],
-            Marca: result.value[1],
-            Modelo: result.value[2],
-            Color: result.value[3],
-            Estado: result.value[4],
-            Tipo: result.value[5],
-          });
-          return (this.dataSource.filter = '');
+          var newVehicle: any = {
+            plate: result.value[0],
+            brand: result.value[1],
+            model: result.value[2],
+            color: result.value[3],
+            vehicleTypeId: result.value[5],
+            stateId: result.value[4],
+          };
+          this.APIVehicle.createVehicle(newVehicle).then(
+            (data) => {
+              if (data && data.length > 0) {
+                var response: any = {
+                  plate: result.value[0],
+                  brand: result.value[1],
+                  model: result.value[2],
+                  color: result.value[3],
+                  vehicleType: this.getVehicleTypeById(
+                    JSON.parse(data).vehicleTypeId
+                  ),
+                  state: this.getStateById(JSON.parse(data).stateId),
+                  id: JSON.parse(data).id,
+                };
+                this.dataSource.data.push(response);
+                return (this.dataSource.filter = '');
+              }
+            },
+            (error) => {
+              console.error(error);
+            }
+          );
         }
       });
   }
 
+  getStates() {
+    var estados = {};
+    for (let index = 0; index < this.states.length; index++) {
+      estados[this.states[index].id] = this.states[index].name;
+    }
+    return estados;
+  }
+
+  getVehicleTypes() {
+    var estados = {};
+    for (let index = 0; index < this.vehicleTypes.length; index++) {
+      estados[this.vehicleTypes[index].id] = this.vehicleTypes[index].name;
+    }
+    return estados;
+  }
+
   deleteData() {
     for (var j = 0; j < this.selection._selected.length; j++) {
-      var i = this.dataSource.data.indexOf(this.selection._selected[j]);
-      this.dataSource.data.splice(i, 1);
+      this.delteThisRow(this.selection._selected[j]);
     }
-    return (this.dataSource.filter = '');
   }
 
   delteThisRow(element) {
-    var i = this.dataSource.data.indexOf(element);
-    this.dataSource.data.splice(i, 1);
-    return (this.dataSource.filter = '');
+    this.APIVehicle.deleteVehicle(element.id).then(
+      (data) => {
+        if (data) {
+          var i = this.dataSource.data.indexOf(element);
+          this.dataSource.data.splice(i, 1);
+          return (this.dataSource.filter = '');
+        }
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   updateData(element) {
@@ -225,11 +252,15 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
         },
         {
           text: 'Estado',
-          input: 'text',
+          input: 'select',
+          inputOptions: this.getStates(),
+          inputPlaceholder: 'Seleccionar un estado',
         },
         {
-          text: 'Tipo',
-          input: 'text',
+          text: 'Tipo de vehículo',
+          input: 'select',
+          inputOptions: this.getVehicleTypes(),
+          inputPlaceholder: 'Seleccionar un tipo de vehículo',
         },
       ])
       .then((result: any) => {
@@ -246,43 +277,76 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
           ) {
             var data: any = {};
             if (result.value[0]) {
-              data.Placa = result.value[0];
+              data.plate = result.value[0];
             } else {
-              data.Placa = element.Placa;
+              data.plate = element.plate;
             }
             if (result.value[1]) {
-              data.Marca = result.value[1];
+              data.brand = result.value[1];
             } else {
-              data.Marca = element.Marca;
+              data.brand = element.brand;
             }
             if (result.value[2]) {
-              data.Modelo = result.value[2];
+              data.model = result.value[2];
             } else {
-              data.Modelo = element.Modelo;
+              data.model = element.model;
             }
             if (result.value[3]) {
-              data.Color = result.value[3];
+              data.color = result.value[3];
             } else {
-              data.Color = element.Color;
+              data.color = element.color;
             }
             if (result.value[4]) {
-              data.Estado = result.value[4];
+              data.state = this.getStateById(result.value[4]);
             } else {
-              data.Estado = element.Estado;
+              data.state = element.state;
             }
             if (result.value[5]) {
-              data.Tipo = result.value[5];
+              data.vehicleType = this.getVehicleTypeById(result.value[5]);
             } else {
-              data.Tipo = element.Tipo;
+              data.vehicleType = element.vehicleType;
             }
             data.id = element.id;
 
-            var i = this.dataSource.data.indexOf(element);
-            this.dataSource.data[i] = data;
-            return (this.dataSource.filter = '');
+            var newVehicle = {
+              plate: data.plate,
+              brand: data.brand,
+              model: data.model,
+              color: data.color,
+              vehicleTypeId: data.vehicleType.id,
+              stateId: data.state.id,
+            };
+            this.APIVehicle.updateVehicle(data.id, newVehicle).then(
+              (result) => {
+                if (result) {
+                  var i = this.dataSource.data.indexOf(element);
+                  this.dataSource.data[i] = data;
+                  return (this.dataSource.filter = '');
+                }
+              },
+              (error) => {
+                console.error(error);
+              }
+            );
           }
         }
       });
+  }
+
+  getStateById(id: string) {
+    for (let index = 0; index < this.states.length; index++) {
+      if (this.states[index].id == id) {
+        return this.states[index];
+      }
+    }
+  }
+
+  getVehicleTypeById(id: string) {
+    for (let index = 0; index < this.vehicleTypes.length; index++) {
+      if (this.vehicleTypes[index].id == id) {
+        return this.vehicleTypes[index];
+      }
+    }
   }
 
   constructor(private APIVehicle: VehicleService) {}
@@ -293,6 +357,27 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
         if (data && data.length > 0) {
           this.Vehicles = data;
           this.dataSource = new MatTableDataSource(this.Vehicles);
+          this.dataSource.filter = '';
+        }
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+    this.APIVehicle.getStates().then(
+      (data) => {
+        if (data && data.length > 0) {
+          this.states = data;
+        }
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+    this.APIVehicle.getVehicleTypes().then(
+      (data) => {
+        if (data && data.length > 0) {
+          this.vehicleTypes = data;
         }
       },
       (error) => {

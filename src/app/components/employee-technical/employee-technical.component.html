@@ -31,24 +31,24 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="Placa">
+    <ng-container matColumnDef="plate">
       <th mat-header-cell *matHeaderCellDef>Placa</th>
-      <td mat-cell *matCellDef="let element">{{ element.Placa }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.plate }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="Marca">
+    <ng-container matColumnDef="brand">
       <th mat-header-cell *matHeaderCellDef>Marca</th>
-      <td mat-cell *matCellDef="let element">{{ element.Marca }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.brand }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="Modelo">
+    <ng-container matColumnDef="model">
       <th mat-header-cell *matHeaderCellDef>Modelo</th>
-      <td mat-cell *matCellDef="let element">{{ element.Modelo }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.model }}</td>
     </ng-container>
 
-    <ng-container matColumnDef="Color">
+    <ng-container matColumnDef="color">
       <th mat-header-cell *matHeaderCellDef>Color</th>
-      <td mat-cell *matCellDef="let element">{{ element.Color }}</td>
+      <td mat-cell *matCellDef="let element">{{ element.color }}</td>
     </ng-container>
 
     <!-- <ng-container
@@ -72,15 +72,22 @@
           "
         >
           <div class="example-element-diagram">
-            <div class="example-element-position">{{ element.Placa }}</div>
-            <div class="example-element-symbol">{{ element.Marca }}</div>
-            <div class="example-element-name">{{ element.Modelo }}</div>
-            <div class="example-element-weight">{{ element.Color }}</div>
+            <div class="example-element-position">{{ element.brand }}</div>
+            <div class="example-element-symbol">{{ element.plate }}</div>
+            <div class="example-element-name">{{ element.model }}</div>
+            <div class="example-element-weight">{{ element.color }}</div>
           </div>
           <div class="example-element-description">
-            {{ element.Estado }}
+            <strong>{{ element.state.name }}:</strong>
+            {{ element.state.description }}
             <span class="example-element-description-attribution">
               -- Estado actual
+            </span>
+          </div>
+          <div class="example-element-description">
+            {{ element.vehicleType.name }}
+            <span class="example-element-description-attribution">
+              -- Tipo de vehículo
             </span>
           </div>
           <div class="example-button-row">

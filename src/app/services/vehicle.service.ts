@@ -37,6 +37,20 @@ export class VehicleService {
       .toPromise();
   }
 
+  async getStates(): Promise<any> {
+    return await this.http
+      .get<any[]>(urlBase + '/states')
+      .pipe(retry(1), catchError(this.handleError))
+      .toPromise();
+  }
+
+  async getVehicleTypes(): Promise<any> {
+    return await this.http
+      .get<any[]>(urlBase + '/vehicleTypes')
+      .pipe(retry(1), catchError(this.handleError))
+      .toPromise();
+  }
+
   async createVehicle(vehicle: any): Promise<any> {
     return await this.http
       .post<any>(this.urlApi, JSON.stringify(vehicle), this.httpOptions)
@@ -51,9 +65,9 @@ export class VehicleService {
       .toPromise();
   }
 
-  async updateVehicle(vehicle: any) {
+  async updateVehicle(id: string, vehicle: any) {
     return await this.http
-      .put(this.urlApi + '/' + vehicle.id, vehicle)
+      .put(this.urlApi + '/' + id, vehicle)
       .pipe(retry(1), catchError(this.handleError))
       .toPromise();
   }

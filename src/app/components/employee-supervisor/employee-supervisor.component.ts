@@ -48,7 +48,7 @@ export class EmployeeSupervisorComponent implements OnInit {
   };
   owners: Owner[];
   dataSource: MatTableDataSource<Owner>;
-  columnsToDisplay: string[] = ['select', 'name', 'email', 'cellphone', 'role'];
+  columnsToDisplay: string[] = ['select', 'name', 'email', 'cellphone'];
   expandedElement: Owner | null;
   selection: any = new SelectionModel<Owner>(true, []);
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -142,6 +142,14 @@ export class EmployeeSupervisorComponent implements OnInit {
       (data) => {
         if (data && data.length > 0) {
           this.owners = data;
+          this.spinner = false;
+        } else {
+          Swal.fire({
+            icon: 'warning',
+            text: 'No se encontraron propietarios',
+            showConfirmButton: true,
+            confirmButtonColor: '#34c4b7',
+          });
           this.spinner = false;
         }
       }, (error) => {

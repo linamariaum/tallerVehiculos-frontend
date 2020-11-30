@@ -1,3 +1,9 @@
+<div class="container">
+  <h2 align="end">Hola!</h2>
+  <button mat-raised-button (click)="profile()" class="color-blue">
+    <mat-icon>account_box</mat-icon> Ver mi perfil
+  </button>
+</div>
 <mat-form-field>
   <mat-label>Filtrar</mat-label>
   <input
@@ -110,7 +116,7 @@
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
     <tr
       mat-row
       *matRowDef="let element; columns: columnsToDisplay"

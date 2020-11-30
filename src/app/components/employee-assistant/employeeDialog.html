@@ -1,0 +1,78 @@
+<h2 mat-dialog-title style="font-weight: bold; font-size: large;">{{title}}</h2>
+<mat-dialog-content class="mat-typography" style="height: 100%;">
+  <br>
+  <form [formGroup]="groupControl">
+  <table style="width: 100%;">
+    <tr>
+      <td><mat-form-field>
+        <mat-label>Nombres y apellidos</mat-label>
+        <input matInput [disabled]="editField" value="{{data.employee.name}}"
+        formControlName="nameInput" required type="text">
+      </mat-form-field></td>
+      <td><mat-form-field style="width: 100%;">
+        <mat-label>Teléfono</mat-label>
+        <input matInput [disabled]="editField" value="{{data.employee.cellphone}}"
+        formControlName="cellphoneInput" required type="number">
+      </mat-form-field></td>
+    </tr>
+    <tr>
+      <td><mat-form-field>
+        <mat-label>Correo</mat-label>
+        <input matInput [disabled]="editField" value="{{data.employee.email}}"
+        formControlName="emailInput" required type="email">
+      </mat-form-field></td>
+      <td>
+          <mat-form-field style="width: 80%;">
+            <mat-label>Cargo</mat-label>
+            <mat-select required formControlName="roleInput">
+              <mat-option *ngFor="let role of roles" [value]="role.id">
+                {{role.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </td>
+    </tr>
+    <tr *ngIf="!editField">
+      <td><mat-form-field>
+        <mat-label>Contraseña</mat-label>
+        <input matInput [disabled]="editField" value=""
+        formControlName="passwordInput" required type="password">
+      </mat-form-field></td>
+    </tr>
+    <tr *ngIf="editField">
+      <td><mat-form-field>
+        <mat-label>Contraseña actual</mat-label>
+        <input matInput [disabled]="editField" value=""
+        formControlName="passwordInput" type="password">
+      </mat-form-field></td>
+      <td><mat-form-field>
+        <mat-label>Nueva contraseña</mat-label>
+        <input matInput [disabled]="editField && passwordWrote" value=""
+        formControlName="newPasswordInput" required type="password">
+      </mat-form-field></td>
+    </tr>
+    </table>
+  </form>
+  <br>
+  <p>*Se habilitará el botón de envío cuando diligencie correctamente los campos.</p>
+  <p *ngIf="editField">*Para ingresar nueva contraseña, deberá escribir su contraseña actual.</p>
+  <span style="color: red;"> {{getError('nameInput')}}</span>
+  <span style="color: red;"> {{getError('cellphoneInput')}}</span>
+  <span style="color: red;"> {{getError('emailInput')}}</span>
+  <span style="color: red;"> {{getError('roleInput')}}</span>
+  <span style="color: red;"> {{getError('passwordInput')}}</span>
+  <span *ngIf="editField" style="color: red;"> {{getError('newPasswordInput')}}</span>
+
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="onNoClick()" type="reset" style="background-color: #2b6f54;">Regresar</button>
+  <ng-container *ngIf="!groupControl.invalid;else groupInvalid">
+    <button mat-button [mat-dialog-close]="data"
+    [disabled]="groupControl.invalid" (click)="saveEmployee()" type="submit" style="background-color: #34c4b7;">Guardar</button>
+  </ng-container>
+  <ng-template #groupInvalid>
+    <button mat-button style="color:#505853; background-color: rgba(248, 237, 237, 0.589);"
+    [disabled]="groupControl.invalid">Guardar</button>
+  </ng-template>
+</mat-dialog-actions>

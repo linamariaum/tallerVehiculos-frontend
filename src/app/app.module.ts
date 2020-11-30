@@ -13,10 +13,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
@@ -24,6 +28,11 @@ import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoy
 import { LoginOwnerComponent } from './components/login-owner/login-owner.component';
 import { AuthService } from './services/auth.service';
 import { EmployeeTechnicalComponent } from './components/employee-technical/employee-technical.component';
+import { EmployeeAssistantComponent } from './components/employee-assistant/employee-assistant.component';
+import { EmployeeDialog } from './components/employee-assistant/employeeDialog';
+import { ProfileDialog } from './components/profile/profileDialog';
+import { EmployeeSupervisorComponent } from './components/employee-supervisor/employee-supervisor.component';
+import { OwnerDialog } from './components/employee-supervisor/ownerDialog';
 
 @NgModule({
   declarations: [
@@ -33,6 +42,16 @@ import { EmployeeTechnicalComponent } from './components/employee-technical/empl
     LoginOwnerComponent,
     LoginEmlpoyeeComponent,
     EmployeeTechnicalComponent,
+    EmployeeAssistantComponent,
+    EmployeeDialog,
+    ProfileDialog,
+    OwnerDialog,
+    EmployeeSupervisorComponent
+  ],
+  entryComponents: [
+    EmployeeDialog,
+    ProfileDialog,
+    OwnerDialog
   ],
   imports: [
     MatCheckboxModule,
@@ -54,6 +73,10 @@ import { EmployeeTechnicalComponent } from './components/employee-technical/empl
     MatToolbarModule,
     MatGridListModule,
     HttpClientModule,
+    MatIconModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent],

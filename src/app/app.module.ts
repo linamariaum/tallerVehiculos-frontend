@@ -5,20 +5,34 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
 import { LoginOwnerComponent } from './components/login-owner/login-owner.component';
 import { AuthService } from './services/auth.service';
+import { EmployeeTechnicalComponent } from './components/employee-technical/employee-technical.component';
+import { EmployeeAssistantComponent } from './components/employee-assistant/employee-assistant.component';
+import { EmployeeDialog } from './components/employee-assistant/employeeDialog';
+import { ProfileDialog } from './components/profile/profileDialog';
+import { EmployeeSupervisorComponent } from './components/employee-supervisor/employee-supervisor.component';
+import { OwnerDialog } from './components/employee-supervisor/ownerDialog';
 
 @NgModule({
   declarations: [
@@ -26,9 +40,24 @@ import { AuthService } from './services/auth.service';
     HomepageComponent,
     ProfileComponent,
     LoginOwnerComponent,
-    LoginEmlpoyeeComponent
+    LoginEmlpoyeeComponent,
+    EmployeeTechnicalComponent,
+    EmployeeAssistantComponent,
+    EmployeeDialog,
+    ProfileDialog,
+    OwnerDialog,
+    EmployeeSupervisorComponent
+  ],
+  entryComponents: [
+    EmployeeDialog,
+    ProfileDialog,
+    OwnerDialog
   ],
   imports: [
+    MatCheckboxModule,
+    MatSortModule,
+    MatPaginatorModule,
+    MatTableModule,
     FormsModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -43,7 +72,11 @@ import { AuthService } from './services/auth.service';
     MatCardModule,
     MatToolbarModule,
     MatGridListModule,
-    HttpClientModule
+    HttpClientModule,
+    MatIconModule,
+    MatSelectModule,
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent],

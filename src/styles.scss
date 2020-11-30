@@ -21,6 +21,7 @@ body {
 }
 .color-green {
   background-color: $color-green !important;
+  color: $white;
 }
 .color-green-ligth {
   background-color: $color-green-ligth !important;
@@ -37,8 +38,8 @@ body {
 .title {
   color: $color-green-dark;
   text-align: center;
- }
- .container {
+}
+.container {
   margin: 2rem 3rem 2rem 3rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 1rem;
@@ -52,3 +53,8 @@ body {
 .mat-input-element:disabled {
   color: $black;
 }
+.mat-table {
+  //text-align: center;
+  white-space: nowrap;
+}
+.th.mat-header-cell.text-center { text-align: center; }

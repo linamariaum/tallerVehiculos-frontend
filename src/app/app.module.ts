@@ -30,6 +30,8 @@ import { AuthService } from './services/auth.service';
 import { EmployeeAssistantComponent } from './components/employee-assistant/employee-assistant.component';
 import { EmployeeDialog } from './components/employee-assistant/employeeDialog';
 import { ProfileDialog } from './components/profile/profileDialog';
+import { EmployeeSupervisorComponent } from './components/employee-supervisor/employee-supervisor.component';
+import { OwnerDialog } from './components/employee-supervisor/ownerDialog';
 
 @NgModule({
   declarations: [
@@ -40,11 +42,14 @@ import { ProfileDialog } from './components/profile/profileDialog';
     LoginEmlpoyeeComponent,
     EmployeeAssistantComponent,
     EmployeeDialog,
-    ProfileDialog
+    ProfileDialog,
+    OwnerDialog,
+    EmployeeSupervisorComponent
   ],
   entryComponents: [
     EmployeeDialog,
-    ProfileDialog
+    ProfileDialog,
+    OwnerDialog
   ],
   imports: [
     MatCheckboxModule,

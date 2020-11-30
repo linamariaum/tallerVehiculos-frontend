@@ -5,9 +5,11 @@ import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoy
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { EmployeeAssistantComponent } from './components/employee-assistant/employee-assistant.component';
+import { EmployeeSupervisorComponent } from './components/employee-supervisor/employee-supervisor.component';
 
 const routes: Routes = [
   { path: 'employee-assistant/:id', component: EmployeeAssistantComponent },
+  { path: 'employee-supervisor/:id', component: EmployeeSupervisorComponent },
   { path: 'login-owner', component: LoginOwnerComponent },
   { path: 'login-emlpoyee', component: LoginEmlpoyeeComponent },
   { path: 'homepage', component: HomepageComponent },

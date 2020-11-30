@@ -336,7 +336,7 @@ export class EmployeeAssistantComponent implements OnInit {
         (await this.employeeService.removeEmployee(employee.id)).subscribe(result => {
           Swal.fire({
             icon: 'success',
-            title: 'Deleted!',
+            title: 'Eliminado!',
             showConfirmButton: false,
             timer: 1500
           });
@@ -394,7 +394,7 @@ export class EmployeeAssistantComponent implements OnInit {
         this.selection.selected.length = 0;
         Swal.fire({
           icon: 'success',
-          title: 'Deleted!',
+          title: 'Eliminado!',
           showConfirmButton: false,
           timer: 1500
         });

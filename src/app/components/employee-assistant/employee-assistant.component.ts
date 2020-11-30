@@ -43,11 +43,11 @@ export class EmployeeAssistantComponent implements OnInit {
       removalDate: 'Malo',
       cellphone: '2342342376',
       role: {
-        id: 1,
+        id: 4,
         name: 'Asistente de gerencia'
       }
     };
-    employees: Employee[];
+    employees: Employee[] = [];
     dataSource: MatTableDataSource<Employee>;
     columnsToDisplay: string[] = ['select', 'name', 'email', 'cellphone', 'role'];
     expandedElement: Employee | null;
@@ -56,11 +56,7 @@ export class EmployeeAssistantComponent implements OnInit {
     @ViewChild(MatSort, {static: true}) sort: MatSort;
     spinner: boolean = true;
     control: FormGroup;
-    roles: Role[] = [
-      { id: 1, name: 'Asistente de gerencia' },
-      { id: 2, name: 'Supervisor' },
-      { id: 3, name: 'Técnico' }
-    ];
+    roles: Role[];
     sub: Subscription;
 
   constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService, public employeeDialog: MatDialog,
@@ -80,24 +76,24 @@ export class EmployeeAssistantComponent implements OnInit {
           const datos = data;
           this.roles = datos;
         });
-    //     (await this.employeeService.getEmployee(id)).subscribe((user: Employee) => {
-    //       if (user) {
-    //         this.userEmployee = user;
-    //       } else {
-    //         Swal.fire({
-    //           icon: 'error',
-    //           title: 'Oops...',
-    //           text: 'No tiene permiso para acceder a este recurso! Redireccionando',
-    //           showConfirmButton: true,
-    //           confirmButtonColor: '#34c4b7',
-    //         });
-    //         this.router.navigate(['/homepage']);
-    //       }
-    //     }, error => {
-    //       console.error(error)
-    //       this.errorService();
-    //       this.router.navigate(['/homepage']);
-    //     });
+        // (await this.employeeService.getEmployee(id)).subscribe((user: Employee) => {
+        //   if (user) {
+        //     this.userEmployee = user;
+        //   } else {
+        //     Swal.fire({
+        //       icon: 'error',
+        //       title: 'Oops...',
+        //       text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+        //       showConfirmButton: true,
+        //       confirmButtonColor: '#34c4b7',
+        //     });
+        //     this.router.navigate(['/homepage']);
+        //   }
+        // }, error => {
+        //   console.error(error)
+        //   this.errorService();
+        //   this.router.navigate(['/homepage']);
+        // });
 
       } else {
         Swal.fire({
@@ -175,52 +171,26 @@ export class EmployeeAssistantComponent implements OnInit {
     return this.employeeService.getAllEmployees().then(
       (data) => {
         if (data && data.length > 0) {
-          this.employees = data;
+          data.forEach(element => {
+            let employee: Employee = {
+              id: element.id,
+              name: element.name,
+              password: element.password,
+              email: element.email,
+              cellphone: element.cellphone,
+              registryDate: element.registryDate,
+              removalDate: element.removalDate,
+              role: {
+                id: element.roleId,
+                name: this.searchNameByRole(element.roleId)
+              }
+            }
+            this.employees.push(employee);
+          });
           this.spinner = false;
         }
       }, (error) => {
         console.error(error);
-        this.employees = [
-          {
-            id: 1,
-            password: 'MMI132',
-            name: 'Tesla Perez',
-            registryDate: '2001',
-            email: 'tesla@email.com',
-            removalDate: 'Malo',
-            cellphone: '2342342376',
-            role: {
-              id: 3,
-              name: 'Tecnico'
-            }
-          },
-          {
-            id: 4,
-            password: 'h1',
-            name: 'Tisla Perez',
-            registryDate: '2020',
-            email: 'tisla@email.com',
-            removalDate: 'h1',
-            cellphone: '2343434236',
-            role: {
-              id: 2,
-              name: 'Supervisor'
-            }
-          },
-          {
-            id: 11,
-            password: 'h6',
-            name: 'Tusla Perez',
-            registryDate: '2020',
-            email: 'tuslaPerez@email.com',
-            removalDate: 'h6',
-            cellphone: '2345678834',
-            role: {
-              id: 3,
-              name: 'Tecnico'
-            }
-          },
-        ];
         this.spinner = false;
         this.errorService();
       }
@@ -237,7 +207,6 @@ export class EmployeeAssistantComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result.employee); // COSA DESECHABLE
         this.spinner = true;
         this.updateEmployee(result.employee);
       }
@@ -265,7 +234,6 @@ export class EmployeeAssistantComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result.employee) // COSA DESECHABLE
         if (result.type === 'create') {
           this.spinner = true;
           this.createEmployee(result.employee);
@@ -280,13 +248,14 @@ export class EmployeeAssistantComponent implements OnInit {
   async createEmployee(newEmployee: NewEmployeeRequests) {
     return this.employeeService.createEmployee(newEmployee).then(
       async (data) => {
-        if (data && data.length > 0) { // COSA
+        if (data) { // COSA
           Swal.fire({
             icon: 'success',
-            title: `Empleado agregado exitosamente.`,
+            title: `Empleado ${data.name} agregado exitosamente.`,
             showConfirmButton: true,
             confirmButtonColor: '#34c4b7'
           });
+          this.employees= [];
           await this.loadEmployees();
           this.init(this.employees);
         }
@@ -308,6 +277,7 @@ export class EmployeeAssistantComponent implements OnInit {
             showConfirmButton: true,
             confirmButtonColor: '#34c4b7'
           });
+          this.employees= [];
           await this.loadEmployees();
           this.init(this.employees);
         }
@@ -348,13 +318,6 @@ export class EmployeeAssistantComponent implements OnInit {
         }, (error) => {
           console.error(error);
           this.errorService();
-          // COSA INICIO DESECHABLE
-          const index: number = this.employees.indexOf(this.searchEmployeeById(employee.id));
-            if (index !== -1) {
-                this.employees.splice(index, 1);
-            }
-          this.init(this.employees);
-          // COSA FIN DESECHABLE
         });
       }
     });
@@ -390,7 +353,6 @@ export class EmployeeAssistantComponent implements OnInit {
             this.errorService();
           });
         }
-        this.init(this.employees); // COSA DESECHABLE
         this.selection.selected.length = 0;
         Swal.fire({
           icon: 'success',

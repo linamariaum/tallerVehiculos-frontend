@@ -15,11 +15,7 @@ export class EmployeeDialog implements OnInit {
   editField: boolean;
   passwordWrote: boolean = false;
   groupControl: FormGroup;
-  roles: Role[] = [
-    { id: 1, name: 'Asistente de gerencia' },
-    { id: 2, name: 'Supervisor' },
-    { id: 3, name: 'Técnico' }
-  ];
+  roles: Role[];
 
   constructor(
     public dialogRef: MatDialogRef<EmployeeDialog>,
@@ -41,7 +37,8 @@ export class EmployeeDialog implements OnInit {
           [Validators.required, Validators.minLength(7), Validators.maxLength(10)]),
         emailInput: new FormControl('',
          [Validators.required, Validators.email]),
-        roleInput: new FormControl('', Validators.required)
+        roleInput: new FormControl('', Validators.required),
+        passwordInput: new FormControl('', [Validators.required, Validators.minLength(4)])
       });
 
     } else if (this.data.type === 'update') {
@@ -82,11 +79,15 @@ export class EmployeeDialog implements OnInit {
       const newEmployee: NewEmployeeRequests =
         {
           name: this.groupControl.get('nameInput').value,
-          password: "1234",
+          password: this.groupControl.get('passwordInput').value,
           email: this.groupControl.get('emailInput').value,
           cellphone: this.groupControl.get('cellphoneInput').value,
           roleId: this.groupControl.get('roleInput').value
         }
+        console.log('tipo de cell')
+        console.log(typeof(this.groupControl.get('cellphoneInput').value))
+        console.log('tipo de rol id')
+        console.log(typeof(this.groupControl.get('roleInput').value))
       this.data.employee = newEmployee;
 
     } else if (this.data.type === 'update') {

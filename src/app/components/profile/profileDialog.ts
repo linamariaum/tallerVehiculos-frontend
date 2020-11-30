@@ -14,11 +14,7 @@ export class ProfileDialog implements OnInit {
   editField: boolean;
   passwordWrote: boolean = false;
   groupControl: FormGroup;
-  roles: Role[] = [
-    { id: 1, name: 'Asistente de gerencia' },
-    { id: 2, name: 'Supervisor' },
-    { id: 3, name: 'Técnico' }
-  ];
+  roles: Role[];
 
   constructor(
     public dialogRef: MatDialogRef<ProfileDialog>,

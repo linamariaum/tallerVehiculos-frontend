@@ -8,7 +8,9 @@ import {
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Router } from '@angular/router';
+import { Role } from 'src/app/models/role';
 import { AuthService } from 'src/app/services/auth.service';
+import { RoleService } from 'src/app/services/role.service';
 import Swal from 'sweetalert2';
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -36,8 +38,9 @@ export class LoginEmlpoyeeComponent implements OnInit {
   user: any;
   error: boolean;
   matcher = new MyErrorStateMatcher();
+  roles: Role[];
 
-  constructor(private router: Router, private apiService: AuthService) {
+  constructor(private router: Router, private apiService: AuthService, private roleService: RoleService) {
     this.loginEmployeeForm = new FormGroup({
       emailFormControl: new FormControl('', [
         Validators.required,
@@ -73,14 +76,18 @@ export class LoginEmlpoyeeComponent implements OnInit {
             confirmButtonColor: '#34c4b7',
           }).then((result) => {
             if (result.isConfirmed) {
-              switch (this.user.role.id) {
-                case 1:
+              this.roleService.getAll().subscribe(data => {
+                this.roles = data;
+              });
+              const nameRole = this.searchNameByRole(this.user.role.id);
+              switch (nameRole) {
+                case 'Asistente de gerencia':
                   this.router.navigate(['employee-assistant', this.user.id]);
                   break;
-                case 2:
-                  this.router.navigate(['employee-assistant', this.user.id]);
+                case 'Supervisor':
+                  this.router.navigate(['employee-supervisor', this.user.id]);
                   break;
-                case 3:
+                case 'Mecánico':
                   this.router.navigate(['emlpoyee-technical', this.user.id]);
                   break;
                 default:
@@ -111,4 +118,16 @@ export class LoginEmlpoyeeComponent implements OnInit {
       }
     );
   }
+
+  searchNameByRole(idRole: string): string {
+    const id = +idRole;
+    let name = '';
+    this.roles.forEach(element => {
+      if (element.id === id) {
+        name = element.name;
+      }
+    });
+    return name;
+  }
+
 }

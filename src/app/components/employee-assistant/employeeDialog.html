@@ -32,6 +32,13 @@
           </mat-form-field>
       </td>
     </tr>
+    <tr *ngIf="!editField">
+      <td><mat-form-field>
+        <mat-label>Contraseña</mat-label>
+        <input matInput [disabled]="editField" value=""
+        formControlName="passwordInput" required type="password">
+      </mat-form-field></td>
+    </tr>
     <tr *ngIf="editField">
       <td><mat-form-field>
         <mat-label>Contraseña actual</mat-label>
@@ -53,7 +60,7 @@
   <span style="color: red;"> {{getError('cellphoneInput')}}</span>
   <span style="color: red;"> {{getError('emailInput')}}</span>
   <span style="color: red;"> {{getError('roleInput')}}</span>
-  <span *ngIf="editField" style="color: red;"> {{getError('passwordInput')}}</span>
+  <span style="color: red;"> {{getError('passwordInput')}}</span>
   <span *ngIf="editField" style="color: red;"> {{getError('newPasswordInput')}}</span>
 
 

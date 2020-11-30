@@ -25,19 +25,19 @@ export class EmployeeService {
     responseType: 'text' as 'json',
   };
 
-  async getAllEmployees(): Promise<Employee[]> {
+  async getAllEmployees(): Promise<any[]> {
     return await this.http
-      .get<Employee[]>(this.urlApi)
+      .get<any[]>(this.urlApi)
       .pipe(retry(1), catchError(this.handleError))
       .toPromise();
   }
 
-  async getEmployee(id: string) {
+  async getEmployee(email: string) {
     return this.http
-      .get(this.urlApi + '/' + id);
+      .get(this.urlApi + '/search?q=' + email);
   }
 
-  async createEmployee(employee: NewEmployeeRequests): Promise<any> {
+  async createEmployee(employee: NewEmployeeRequests): Promise<Employee> {
     return await this.http
       .post<any>(this.urlApi, JSON.stringify(employee), this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))

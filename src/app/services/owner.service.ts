@@ -49,9 +49,9 @@ export class OwnerService {
     return this.http.delete(this.urlApi + '/' + id);
   }
 
-  async updateOwner(employee: UpdateOwnerRequests): Promise<any> {
+  async updateOwner(id: number, employee: UpdateOwnerRequests): Promise<any> {
     return await this.http
-      .put(this.urlApi + '/' + employee.id, employee)
+      .put(this.urlApi + '/' + id, employee)
       .pipe(retry(1), catchError(this.handleError))
       .toPromise();
   }

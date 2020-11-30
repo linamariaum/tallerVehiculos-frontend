@@ -13,7 +13,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { EmployeeDialog } from './employeeDialog';
 import { NewEmployeeRequests } from 'src/app/models/dataRequests/newEmployee';
 import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmployee';
-import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileDialog } from '../profile/profileDialog';
 import { RoleService } from 'src/app/services/role.service';
@@ -35,16 +34,16 @@ import { RoleService } from 'src/app/services/role.service';
 })
 export class EmployeeAssistantComponent implements OnInit {
     userEmployee: Employee = {
-      id: 6,
-      password: 'MMI132',
-      name: 'Asis Perez',
-      registryDate: '2001',
-      email: 'asis@email.com',
-      removalDate: 'Malo',
-      cellphone: '2342342376',
+      id: 45,
+      name: 'Pepita Perez',
+      password: 'string;',
+      email: 'pepita@email.com',
+      cellphone: '123123213',
+      registryDate: 'string;',
+      removalDate: 'string;',
       role: {
-        id: 4,
-        name: 'Asistente de gerencia'
+        id: 3,
+        name: 'Supervisor'
       }
     };
     employees: Employee[] = [];
@@ -57,54 +56,45 @@ export class EmployeeAssistantComponent implements OnInit {
     spinner: boolean = true;
     control: FormGroup;
     roles: Role[];
-    sub: Subscription;
 
   constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService, public employeeDialog: MatDialog,
-    private route: ActivatedRoute, private router: Router, private roleService: RoleService) { }
+    private router: Router, private roleService: RoleService) { }
 
   async ngOnInit() {
-
-    // INICIO COSA DESECHABLE
-    const prueba = 0;
-    sessionStorage.setItem('id', prueba.toString());
-    // FIN COSA DESECHABLE
-
-    this.sub = this.route.params.subscribe(async params => {
-      const id = params['id'];
-      if (id && id === sessionStorage.getItem('id')) {
-        this.roleService.getAll().subscribe(data => {
-          const datos = data;
-          this.roles = datos;
-        });
-        // (await this.employeeService.getEmployee(id)).subscribe((user: Employee) => {
-        //   if (user) {
-        //     this.userEmployee = user;
-        //   } else {
-        //     Swal.fire({
-        //       icon: 'error',
-        //       title: 'Oops...',
-        //       text: 'No tiene permiso para acceder a este recurso! Redireccionando',
-        //       showConfirmButton: true,
-        //       confirmButtonColor: '#34c4b7',
-        //     });
-        //     this.router.navigate(['/homepage']);
-        //   }
-        // }, error => {
-        //   console.error(error)
-        //   this.errorService();
-        //   this.router.navigate(['/homepage']);
-        // });
-
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'No tiene permiso para acceder a este recurso! Redireccionando',
-          showConfirmButton: true,
-          confirmButtonColor: '#34c4b7',
-        });
+    /*const email = sessionStorage.getItem('email');
+    if ( email ) {
+      (await this.employeeService.getEmployee(email)).subscribe((user: Employee) => {
+        if (user.role.name === 'Asistende de gerencia') {
+          this.userEmployee = user;
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+            showConfirmButton: true,
+            confirmButtonColor: '#34c4b7',
+          });
+          this.router.navigate(['/homepage']);
+        }
+      }, error => {
+        console.error(error)
+        this.errorService();
         this.router.navigate(['/homepage']);
-      }
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+        showConfirmButton: true,
+        confirmButtonColor: '#34c4b7',
+      });
+      this.router.navigate(['/homepage']);
+    }*/
+
+    this.roleService.getAll().subscribe(data => {
+      const datos = data;
+      this.roles = datos;
     });
     this.control = this.formBuilder.group({
       controlRole: ['']
@@ -112,10 +102,6 @@ export class EmployeeAssistantComponent implements OnInit {
     await this.loadEmployees();
     this.init(this.employees);
     this.onChanges();
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 
   init(datos: Employee[]) {
@@ -202,13 +188,14 @@ export class EmployeeAssistantComponent implements OnInit {
   }
 
   openProfileDialog(employee: Employee) {
+    const id = employee.id;
     const dialogRef = this.employeeDialog.open(ProfileDialog, {
       data: { employee: employee}
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.spinner = true;
-        this.updateEmployee(result.employee);
+        this.updateEmployee(id, result.employee);
       }
     });
   }
@@ -239,7 +226,8 @@ export class EmployeeAssistantComponent implements OnInit {
           this.createEmployee(result.employee);
         } else if ( result.type === 'update') {
           this.spinner = true;
-          this.updateEmployee(result.employee);
+          const id = employee.id;
+          this.updateEmployee(id, result.employee);
         }
       }
     });
@@ -267,10 +255,10 @@ export class EmployeeAssistantComponent implements OnInit {
     );
   }
 
-  async updateEmployee(updateEmployee: UpdateEmployeeRequests) {
-    return this.employeeService.updateEmployee(updateEmployee). then(
+  async updateEmployee(id: number, updateEmployee: UpdateEmployeeRequests) {
+    return this.employeeService.updateEmployee(id, updateEmployee). then(
       async (data) => {
-        if (data && data.length > 0) {
+        if (data) {
           Swal.fire({
             icon: 'success',
             title: 'Información del empleado actualizada correctamente.',

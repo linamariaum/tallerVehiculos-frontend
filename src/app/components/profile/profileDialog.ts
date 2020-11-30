@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmployee';
 import { Role } from 'src/app/models/role';
 import { RoleService } from 'src/app/services/role.service';
+import * as bcrypt from 'bcryptjs';
 
 @Component({
   selector: 'profile-dialog',
@@ -39,31 +40,30 @@ export class ProfileDialog implements OnInit {
         passwordInput: new FormControl('', [Validators.minLength(4)]),
         newPasswordInput: new FormControl({ value: '', disabled: true }, [Validators.minLength(4)])
       });
-      this.onChanges();
+      //this.onChanges();
 
     }
 
-    onChanges() {
-      this.groupControl.get('passwordInput').valueChanges.subscribe(
-        passwrote => {
-          if ( this.groupControl.get('passwordInput').value.length >= 4 ) {
-            this.passwordWrote = true;
-            this.groupControl.get('newPasswordInput').enable();
-          } else {
-            this.passwordWrote = false;
-            this.groupControl.get('newPasswordInput').disable();
-          }
-        }
-      );
-    }
+    // onChanges() {
+    //   this.groupControl.get('passwordInput').valueChanges.subscribe(
+    //     passwrote => {
+    //       if ( this.groupControl.get('passwordInput').value.length >= 4 ) {
+    //         this.passwordWrote = true;
+    //         this.groupControl.get('newPasswordInput').enable();
+    //       } else {
+    //         this.passwordWrote = false;
+    //         this.groupControl.get('newPasswordInput').disable();
+    //       }
+    //     }
+    //   );
+    // }
 
     updateEmployee() {
       const updateInfo: UpdateEmployeeRequests =
       {
-        id: this.data.employee.id,
         cellphone: this.groupControl.get('cellphoneInput').value,
-        password: this.groupControl.get('passwordInput').value,
-        newPassword: this.groupControl.get('newPasswordInput').value,
+        password: bcrypt.hashSync(this.groupControl.get('passwordInput').value, 10),
+        //newPassword: this.groupControl.get('newPasswordInput').value,
         roleId: this.data.employee.role.id
       }
       this.data.employee = updateInfo;

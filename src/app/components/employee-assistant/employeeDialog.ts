@@ -5,6 +5,7 @@ import { NewEmployeeRequests } from 'src/app/models/dataRequests/newEmployee';
 import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmployee';
 import { Role } from 'src/app/models/role';
 import { RoleService } from 'src/app/services/role.service';
+import * as bcrypt from 'bcryptjs';
 
 @Component({
   selector: 'employee-dialog',
@@ -56,30 +57,30 @@ export class EmployeeDialog implements OnInit {
         passwordInput: new FormControl('', [Validators.minLength(4)]),
         newPasswordInput: new FormControl({ value: '', disabled: true }, [Validators.minLength(4)])
       });
-      this.onChanges();
+      //this.onChanges();
     }
   }
 
-  onChanges() {
-    this.groupControl.get('passwordInput').valueChanges.subscribe(
-      passwrote => {
-        if ( this.groupControl.get('passwordInput').value.length >= 4 ) {
-          this.passwordWrote = true;
-          this.groupControl.get('newPasswordInput').enable();
-        } else {
-          this.passwordWrote = false;
-          this.groupControl.get('newPasswordInput').disable();
-        }
-      }
-    );
-  }
+  // onChanges() {
+  //   this.groupControl.get('passwordInput').valueChanges.subscribe(
+  //     passwrote => {
+  //       if ( this.groupControl.get('passwordInput').value.length >= 4 ) {
+  //         this.passwordWrote = true;
+  //         this.groupControl.get('newPasswordInput').enable();
+  //       } else {
+  //         this.passwordWrote = false;
+  //         this.groupControl.get('newPasswordInput').disable();
+  //       }
+  //     }
+  //   );
+  // }
 
   saveEmployee() {
     if (this.data.type === 'create') {
       const newEmployee: NewEmployeeRequests =
         {
           name: this.groupControl.get('nameInput').value,
-          password: this.groupControl.get('passwordInput').value,
+          password: bcrypt.hashSync(this.groupControl.get('passwordInput').value, 10),
           email: this.groupControl.get('emailInput').value,
           cellphone: this.groupControl.get('cellphoneInput').value,
           roleId: this.groupControl.get('roleInput').value
@@ -93,10 +94,9 @@ export class EmployeeDialog implements OnInit {
     } else if (this.data.type === 'update') {
       const updateInfo: UpdateEmployeeRequests =
       {
-        id: this.data.employee.id,
         cellphone: this.groupControl.get('cellphoneInput').value,
-        password: this.groupControl.get('passwordInput').value,
-        newPassword: this.groupControl.get('newPasswordInput').value,
+        password: bcrypt.hashSync(this.groupControl.get('passwordInput').value, 10),
+        //newPassword: this.groupControl.get('newPasswordInput').value,
         roleId: +this.groupControl.get('roleInput').value
       }
       this.data.employee = updateInfo;

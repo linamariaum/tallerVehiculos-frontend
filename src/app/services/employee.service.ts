@@ -48,9 +48,9 @@ export class EmployeeService {
     return this.http.delete(this.urlApi + '/' + id);
   }
 
-  async updateEmployee(employee: UpdateEmployeeRequests): Promise<any> {
+  async updateEmployee(id: number, employee: UpdateEmployeeRequests): Promise<any> {
     return await this.http
-      .put(this.urlApi + '/' + employee.id, employee)
+      .put(this.urlApi + '/' + id, employee)
       .pipe(retry(1), catchError(this.handleError))
       .toPromise();
   }

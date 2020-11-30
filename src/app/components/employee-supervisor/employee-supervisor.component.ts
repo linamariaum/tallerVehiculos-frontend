@@ -5,8 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 import { NewOwnerRequests } from 'src/app/models/dataRequests/newOwner';
 import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmployee';
 import { UpdateOwnerRequests } from 'src/app/models/dataRequests/updateOwner';
@@ -34,7 +33,19 @@ import { OwnerDialog } from './ownerDialog';
   ],
 })
 export class EmployeeSupervisorComponent implements OnInit {
-  userEmployee: Employee = null;
+  userEmployee: Employee = {
+    id: 45,
+    name: 'Pepita Perez',
+    password: 'string;',
+    email: 'pepita@email.com',
+    cellphone: '123123213',
+    registryDate: 'string;',
+    removalDate: 'string;',
+    role: {
+      id: 3,
+      name: 'Supervisor'
+    }
+  };
   owners: Owner[];
   dataSource: MatTableDataSource<Owner>;
   columnsToDisplay: string[] = ['select', 'name', 'email', 'cellphone', 'role'];
@@ -43,58 +54,45 @@ export class EmployeeSupervisorComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   spinner: boolean = true;
-  sub: Subscription;
 
   constructor(private employeeService: EmployeeService, public dialogSource: MatDialog,
-    private route: ActivatedRoute, private router: Router, private ownerService: OwnerService) { }
+    private router: Router, private ownerService: OwnerService) { }
 
   async ngOnInit() {
-    // INICIO COSA DESECHABLE
-    const prueba = 0;
-    sessionStorage.setItem('id', prueba.toString());
-    // FIN COSA DESECHABLE
-
-    this.sub = this.route.params.subscribe(async params => {
-      const id = params['id'];
-      if (id && id === sessionStorage.getItem('id')) {
-
-        // (await this.employeeService.getEmployee(id)).subscribe((user: Employee) => {
-        //   if (user) {
-        //     this.userEmployee = user;
-        //   } else {
-        //     Swal.fire({
-        //       icon: 'error',
-        //       title: 'Oops...',
-        //       text: 'No tiene permiso para acceder a este recurso! Redireccionando',
-        //       showConfirmButton: true,
-        //       confirmButtonColor: '#34c4b7',
-        //     });
-        //     this.router.navigate(['/homepage']);
-        //   }
-        // }, error => {
-        //   console.error(error)
-        //   this.errorService();
-        //   this.router.navigate(['/homepage']);
-        // });
-
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'No tiene permiso para acceder a este recurso! Redireccionando',
-          showConfirmButton: true,
-          confirmButtonColor: '#34c4b7',
-        });
+    /*
+    const email = sessionStorage.getItem('email');
+    if ( email ) {
+      (await this.employeeService.getEmployee(email)).subscribe((user: Employee) => {
+        if (user.role.name === 'Supervisor') {
+          this.userEmployee = user;
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+            showConfirmButton: true,
+            confirmButtonColor: '#34c4b7',
+          });
+          this.router.navigate(['/homepage']);
+        }
+      }, error => {
+        console.error(error)
+        this.errorService();
         this.router.navigate(['/homepage']);
-      }
-    });
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+        showConfirmButton: true,
+        confirmButtonColor: '#34c4b7',
+      });
+      this.router.navigate(['/homepage']);
+    }*/
 
     await this.loadOwners();
     this.init(this.owners);
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 
   init(datos: Owner[]) {
@@ -109,21 +107,21 @@ export class EmployeeSupervisorComponent implements OnInit {
   }
 
   openProfileDialog(employee: Employee) {
+    const id = employee.id;
     const dialogRef = this.dialogSource.open(ProfileDialog, {
       data: { employee: employee}
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result.employee); // COSA DESECHABLE
         this.spinner = true;
-        this.updateEmployee(result.employee);
+        this.updateEmployee(id, result.employee);
       }
     });
   }
-  async updateEmployee(updateEmployee: UpdateEmployeeRequests) {
-    return this.employeeService.updateEmployee(updateEmployee). then(
+  async updateEmployee(id: number, updateEmployee: UpdateEmployeeRequests) {
+    return this.employeeService.updateEmployee(id, updateEmployee). then(
       async (data) => {
-        if (data && data.length > 0) {
+        if (data) {
           Swal.fire({
             icon: 'success',
             title: 'Información del empleado actualizada correctamente.',
@@ -173,13 +171,13 @@ export class EmployeeSupervisorComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result.owner) // COSA DESECHABLE
         if (result.type === 'create') {
           this.spinner = true;
           this.createOwner(result.owner);
         } else if ( result.type === 'update') {
+          const id = owner.id;
           this.spinner = true;
-          this.updateOwner(result.owner);
+          this.updateOwner(id, result.owner);
         }
       }
     });
@@ -206,10 +204,10 @@ export class EmployeeSupervisorComponent implements OnInit {
     );
   }
 
-  async updateOwner(updateOwner: UpdateOwnerRequests) {
-    return this.ownerService.updateOwner(updateOwner). then(
+  async updateOwner(id: number, updateOwner: UpdateOwnerRequests) {
+    return this.ownerService.updateOwner(id, updateOwner). then(
       async (data) => {
-        if (data && data.length > 0) {
+        if (data) {
           Swal.fire({
             icon: 'success',
             title: 'Información del propietario actualizada correctamente.',

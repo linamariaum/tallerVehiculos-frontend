@@ -57,7 +57,6 @@ export class OwnerDialog implements OnInit {
     } else if (this.data.type === 'update') {
       const updateInfo: UpdateOwnerRequests =
       {
-        id: this.data.owner.id,
         email: this.groupControl.get('emailInput').value,
         cellphone: this.groupControl.get('cellphoneInput').value
       }

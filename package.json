@@ -23,7 +23,7 @@
     "@angular/router": "~9.1.4",
     "bcryptjs": "^2.4.3",
     "rxjs": "~6.5.4",
-    "sweetalert2": "^10.6.1",
+    "sweetalert2": "^10.10.2",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },

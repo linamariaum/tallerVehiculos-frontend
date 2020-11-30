@@ -4,11 +4,13 @@ import { LoginOwnerComponent } from './components/login-owner/login-owner.compon
 import { LoginEmlpoyeeComponent } from './components/login-emlpoyee/login-emlpoyee.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { EmployeeAssistantComponent } from './components/employee-assistant/employee-assistant.component';
-import { EmployeeSupervisorComponent } from './components/employee-supervisor/employee-supervisor.component';
+import { EmployeeSupervisorComponent } from './components/employee-supervisor/employee-supervisor.component';  
+import { EmployeeTechnicalComponent } from './components/employee-technical/employee-technical.component';
 
 const routes: Routes = [
   { path: 'employee-assistant', component: EmployeeAssistantComponent },
   { path: 'employee-supervisor', component: EmployeeSupervisorComponent },
+  { path: 'emlpoyee-technical', component: EmployeeTechnicalComponent },
   { path: 'login-owner', component: LoginOwnerComponent },
   { path: 'login-emlpoyee', component: LoginEmlpoyeeComponent },
   { path: 'homepage', component: HomepageComponent },

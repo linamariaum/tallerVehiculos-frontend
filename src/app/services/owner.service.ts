@@ -4,6 +4,8 @@ import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { throwError } from 'rxjs';
 import { Owner } from '../models/Owner';
+import { NewOwnerRequests } from '../models/dataRequests/newOwner';
+import { UpdateOwnerRequests } from '../models/dataRequests/updateOwner';
 
 
 const urlMapping = '/owners';
@@ -36,7 +38,7 @@ export class OwnerService {
       .get(this.urlApi + '/' + id);
   }
 
-  async createOwner(employee: NewEmployeeRequests): Promise<any> {
+  async createOwner(employee: NewOwnerRequests): Promise<any> {
     return await this.http
       .post<any>(this.urlApi, JSON.stringify(employee), this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))
@@ -47,7 +49,7 @@ export class OwnerService {
     return this.http.delete(this.urlApi + '/' + id);
   }
 
-  async updateOwner(employee: UpdateEmployeeRequests): Promise<any> {
+  async updateOwner(employee: UpdateOwnerRequests): Promise<any> {
     return await this.http
       .put(this.urlApi + '/' + employee.id, employee)
       .pipe(retry(1), catchError(this.handleError))

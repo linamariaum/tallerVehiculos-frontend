@@ -248,10 +248,10 @@ export class EmployeeAssistantComponent implements OnInit {
   async createEmployee(newEmployee: NewEmployeeRequests) {
     return this.employeeService.createEmployee(newEmployee).then(
       async (data) => {
-        if (data) { // COSA
+        if (data) {
           Swal.fire({
             icon: 'success',
-            title: `Empleado ${data.name} agregado exitosamente.`,
+            title: `Empleado agregado exitosamente.`,
             showConfirmButton: true,
             confirmButtonColor: '#34c4b7'
           });

@@ -13,6 +13,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import Swal from 'sweetalert2';
 import { Vehicle } from 'src/app/models/vehicle';
 import { VehicleService } from 'src/app/services/vehicle.service';
+import { EmployeeService } from 'src/app/services/employee.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employee-technical',
@@ -349,21 +351,59 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
     }
   }
 
-  constructor(private APIVehicle: VehicleService) {}
+  constructor(
+    private APIVehicle: VehicleService,
+    private employeeService: EmployeeService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.APIVehicle.getVehicles().then(
-      (data) => {
-        if (data && data.length > 0) {
-          this.Vehicles = data;
-          this.dataSource = new MatTableDataSource(this.Vehicles);
-          this.dataSource.filter = '';
+    const email = sessionStorage.getItem('email');
+    if (email) {
+      (await this.employeeService.getEmployee(email)).subscribe(
+        (user: Employee) => {
+          if (user.role.name === 'Mecánico') {
+            this.userEmployee = user;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text:
+                'No tiene permiso para acceder a este recurso! Redireccionando',
+              showConfirmButton: true,
+              confirmButtonColor: '#34c4b7',
+            });
+            this.router.navigate(['/homepage']);
+          }
+        },
+        (error) => {
+          console.error(error);
+          this.errorService();
+          this.router.navigate(['/homepage']);
         }
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+      );
+      this.APIVehicle.getVehicles().then(
+        (data) => {
+          if (data && data.length > 0) {
+            this.Vehicles = data;
+            this.dataSource = new MatTableDataSource(this.Vehicles);
+            this.dataSource.filter = '';
+          }
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+        showConfirmButton: true,
+        confirmButtonColor: '#34c4b7',
+      });
+      this.router.navigate(['/homepage']);
+    }
     this.APIVehicle.getStates().then(
       (data) => {
         if (data && data.length > 0) {

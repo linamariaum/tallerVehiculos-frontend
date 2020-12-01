@@ -33,19 +33,8 @@ import { OwnerDialog } from './ownerDialog';
   ],
 })
 export class EmployeeSupervisorComponent implements OnInit {
-  userEmployee: Employee = {
-    id: 45,
-    name: 'Pepita Perez',
-    password: 'string;',
-    email: 'pepita@email.com',
-    cellphone: '123123213',
-    registryDate: 'string;',
-    removalDate: 'string;',
-    role: {
-      id: 3,
-      name: 'Supervisor'
-    }
-  };
+  userEmployee: Employee;
+  name = sessionStorage.getItem('name');
   owners: Owner[];
   dataSource: MatTableDataSource<Owner>;
   columnsToDisplay: string[] = ['select', 'name', 'email', 'cellphone'];
@@ -59,7 +48,7 @@ export class EmployeeSupervisorComponent implements OnInit {
     private router: Router, private ownerService: OwnerService) { }
 
   async ngOnInit() {
-    /*
+
     const email = sessionStorage.getItem('email');
     if ( email ) {
       (await this.employeeService.getEmployee(email)).subscribe((user: Employee) => {
@@ -89,7 +78,7 @@ export class EmployeeSupervisorComponent implements OnInit {
         confirmButtonColor: '#34c4b7',
       });
       this.router.navigate(['/homepage']);
-    }*/
+    }
 
     await this.loadOwners();
     this.init(this.owners);

@@ -12,7 +12,7 @@ import { Employee } from 'src/app/models/employee';
 import { AuthService } from 'src/app/services/auth.service';
 import { EmployeeService } from 'src/app/services/employee.service';
 import Swal from 'sweetalert2';
-import * as bcrypt from 'bcryptjs';
+//import * as bcrypt from 'bcryptjs';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -58,18 +58,18 @@ export class LoginEmlpoyeeComponent implements OnInit {
   async login() {
     const login = {
       email: this.loginEmployeeForm.get('emailFormControl').value,
-      password: bcrypt.hashSync(this.loginEmployeeForm.get('passwordFormControl').value, 10)
+      //password: bcrypt.hashSync(this.loginEmployeeForm.get('passwordFormControl').value, 10)
+      password: this.loginEmployeeForm.get('passwordFormControl').value
     };
-    console.log(login)
     if ( login ) {
       // Empleado
       (await this.employeeService.getEmployee(login.email)).subscribe(async (user: Employee) => {
-        console.log(user)
         if (user) {
           this.user = user;
-          const match = await bcrypt.compare(this.loginEmployeeForm.get('passwordFormControl').value, user.password);
-          if (match) {
+          //const match = await bcrypt.compare(this.loginEmployeeForm.get('passwordFormControl').value, user.password);
+          if (this.loginEmployeeForm.get('passwordFormControl').value === user.password) {
             sessionStorage.setItem('email', this.user.email);
+            sessionStorage.setItem('name', this.user.name);
             // login
             await this.apiService.getUser(login).then(
               async (data) => {
@@ -104,14 +104,14 @@ export class LoginEmlpoyeeComponent implements OnInit {
                 if (error.status == 401) {
                   Swal.fire({
                     icon: 'warning',
-                    text: 'Los datos ingresados son erróneos. 401',
+                    text: 'Los datos ingresados son erróneos.',
                     showConfirmButton: true,
                     confirmButtonColor: '#34c4b7',
                   });
                 } else {
                   Swal.fire({
                     icon: 'warning',
-                    text: 'Ha ocurrido un problema, intentelo más tarde. 500',
+                    text: 'Ha ocurrido un problema, intentelo más tarde.',
                     showConfirmButton: true,
                     confirmButtonColor: '#34c4b7',
                   });
@@ -123,7 +123,7 @@ export class LoginEmlpoyeeComponent implements OnInit {
           } else {
             Swal.fire({
               icon: 'warning',
-              text: 'Los datos ingresados son erróneos. NO HIZO MATCH',
+              text: 'Los datos ingresados son erróneos.',
               showConfirmButton: true,
               confirmButtonColor: '#34c4b7',
             });
@@ -133,7 +133,7 @@ export class LoginEmlpoyeeComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: 'No tiene permiso para acceder a este recurso! Redireccionando NO ENCONTRE EL GETEMPLOYEE',
+            text: 'No tiene permiso para acceder a este recurso! Redireccionando',
             showConfirmButton: true,
             confirmButtonColor: '#34c4b7',
           });
@@ -147,7 +147,7 @@ export class LoginEmlpoyeeComponent implements OnInit {
     } else {
       Swal.fire({
         icon: 'warning',
-        text: 'Ha ocurrido un problema, intentelo más tarde. NO HAY OBJ LOGIN',
+        text: 'Ha ocurrido un problema, intentelo más tarde.',
         showConfirmButton: true,
         confirmButtonColor: '#34c4b7',
       });

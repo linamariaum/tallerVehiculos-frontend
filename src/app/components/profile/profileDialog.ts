@@ -4,7 +4,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmployee';
 import { Role } from 'src/app/models/role';
 import { RoleService } from 'src/app/services/role.service';
-import * as bcrypt from 'bcryptjs';
 
 @Component({
   selector: 'profile-dialog',
@@ -62,7 +61,7 @@ export class ProfileDialog implements OnInit {
       const updateInfo: UpdateEmployeeRequests =
       {
         cellphone: this.groupControl.get('cellphoneInput').value,
-        password: bcrypt.hashSync(this.groupControl.get('passwordInput').value, 10),
+        //password: bcrypt.hashSync(this.groupControl.get('passwordInput').value, 10),
         //newPassword: this.groupControl.get('newPasswordInput').value,
         roleId: this.data.employee.role.id
       }

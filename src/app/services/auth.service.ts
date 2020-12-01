@@ -4,7 +4,8 @@ import { retry, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { throwError } from 'rxjs';
 
-const urlMapping = '/auth/login';
+//const urlMapping = '/auth/login';
+const urlMapping = '/employees/tests';
 const urlBase = environment.serviceURL;
 
 @Injectable({

@@ -39,7 +39,7 @@
         formControlName="passwordInput" required type="password">
       </mat-form-field></td>
     </tr>
-    <tr *ngIf="editField">
+    <!-- <tr *ngIf="editField">
       <td><mat-form-field>
         <mat-label>Contraseña actual</mat-label>
         <input matInput [disabled]="editField" value=""
@@ -50,7 +50,7 @@
         <input matInput [disabled]="editField && passwordWrote" value=""
         formControlName="newPasswordInput" required type="password">
       </mat-form-field></td>
-    </tr>
+    </tr> -->
     </table>
   </form>
   <br>
@@ -61,7 +61,7 @@
   <span style="color: red;"> {{getError('emailInput')}}</span>
   <span style="color: red;"> {{getError('roleInput')}}</span>
   <span style="color: red;"> {{getError('passwordInput')}}</span>
-  <span *ngIf="editField" style="color: red;"> {{getError('newPasswordInput')}}</span>
+  <!-- <span *ngIf="editField" style="color: red;"> {{getError('newPasswordInput')}}</span> -->
 
 
 </mat-dialog-content>

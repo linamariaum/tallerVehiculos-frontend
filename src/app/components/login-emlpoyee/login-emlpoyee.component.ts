@@ -12,7 +12,7 @@ import { Employee } from 'src/app/models/employee';
 import { AuthService } from 'src/app/services/auth.service';
 import { EmployeeService } from 'src/app/services/employee.service';
 import Swal from 'sweetalert2';
-import * as bcrypt from 'bcryptjs';
+import * as CryptoJS from 'crypto-js';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -53,22 +53,44 @@ export class LoginEmlpoyeeComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   async login() {
+
+    const publicKey = `-----BEGIN RSA PUBLIC KEY-----
+    MIIBCgKCAQEAmbUxk0iPtrKMNR8Tkv4K0xFRsNACtZCclQ+1GMcP8t2+I7qCQWrS
+    QIuDzvpQXHT7Z2MGLPFbDCD9lD8sfbHbTRxUjai93uN/w+L/qOY86c0gdRFdqO+X
+    W1FjtHx+jaCaHXs4nHutzjfcBH0rXydzkuUUoTzdxuB4psJYAOnOh7xWQpzbR9w7
+    FDAeBXQ8rNtgFHhe46SifO68G1y3Enbl2QBsITmz58UJE9Bsv7MFn2fnyVTUWwYp
+    AYGcTlTXND0rZsr1/RPyTsx9pOdb5okxQx9kIP+8MUXhNBTW+VdT0cVkAPtgpMuR
+    OttyvL8JgLvIPXQjWcql25DsoSX3D9Ph5QIDAQAB
+    -----END RSA PUBLIC KEY-----`
+
+    // Encrypt
+    const encryptedPas = CryptoJS.AES.encrypt(
+      this.loginEmployeeForm.get('passwordFormControl').value,
+      publicKey).toString();
+
     const login = {
       email: this.loginEmployeeForm.get('emailFormControl').value,
-      password: bcrypt.hashSync(this.loginEmployeeForm.get('passwordFormControl').value, 10)
+      password: encryptedPas
     };
+
     console.log(login)
+
+    const textoDesencriptado = CryptoJS.AES.decrypt(
+      login.password, publicKey).toString(CryptoJS.enc.Utf8);
+    console.log(textoDesencriptado)
+
     if ( login ) {
       // Empleado
       (await this.employeeService.getEmployee(login.email)).subscribe(async (user: Employee) => {
         console.log(user)
         if (user) {
           this.user = user;
-          const match = await bcrypt.compare(this.loginEmployeeForm.get('passwordFormControl').value, user.password);
-          if (match) {
+          //const match = await bcrypt.compare(this.loginEmployeeForm.get('passwordFormControl').value, user.password);
+          if (true) {
+
             sessionStorage.setItem('email', this.user.email);
             // login
             await this.apiService.getUser(login).then(
@@ -119,6 +141,9 @@ export class LoginEmlpoyeeComponent implements OnInit {
                 console.error(error);
               }
             );
+
+
+
 
           } else {
             Swal.fire({

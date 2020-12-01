@@ -13,13 +13,12 @@ import { SelectionModel } from '@angular/cdk/collections';
 import Swal from 'sweetalert2';
 import { Vehicle } from 'src/app/models/vehicle';
 import { VehicleService } from 'src/app/services/vehicle.service';
-// import { EmployeeService } from 'src/app/services/employee.service';
+import { EmployeeService } from 'src/app/services/employee.service';
 import { Router } from '@angular/router';
 import { Employee } from 'src/app/models/employee';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileDialog } from '../profile/profileDialog';
 import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmployee';
-import { EmployeeService } from 'src/app/services/employee.service';
 
 @Component({
   selector: 'app-employee-technical',
@@ -37,19 +36,8 @@ import { EmployeeService } from 'src/app/services/employee.service';
   ],
 })
 export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
-  userEmployee: Employee = {
-    id: 45,
-    name: 'Pepita Perez',
-    password: 'string;',
-    email: 'pepita@email.com',
-    cellphone: '123123213',
-    registryDate: 'string;',
-    removalDate: 'string;',
-    role: {
-      id: 3,
-      name: 'Supervisor'
-    }
-  };
+  userEmployee: Employee;
+  name = sessionStorage.getItem('name');
   states: any[] = [];
   vehicleTypes: any[] = [];
   Vehicles: Vehicle[] = [];
@@ -410,42 +398,47 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
     private employeeService: EmployeeService
   ) {}
 
-  ngOnInit(): void {
-    // const email = sessionStorage.getItem('email');
-    // if (email) {
-    //   (await this.employeeService.getEmployee(email)).subscribe(
-    //     (user: Employee) => {
-    //       if (user.role.name === 'Mecánico') {
-    //         this.userEmployee = user;
-    //       } else {
-    //         Swal.fire({
-    //           icon: 'error',
-    //           title: 'Oops...',
-    //           text:
-    //             'No tiene permiso para acceder a este recurso! Redireccionando',
-    //           showConfirmButton: true,
-    //           confirmButtonColor: '#34c4b7',
-    //         });
-    //         this.router.navigate(['/homepage']);
-    //       }
-    //     },
-    //     (error) => {
-    //       console.error(error);
-    //       this.errorService();
-    //       this.router.navigate(['/homepage']);
-    //     }
-    //   );
-    //
-    // } else {
-    //   Swal.fire({
-    //     icon: 'error',
-    //     title: 'Oops...',
-    //     text: 'No tiene permiso para acceder a este recurso! Redireccionando',
-    //     showConfirmButton: true,
-    //     confirmButtonColor: '#34c4b7',
-    //   });
-    //   this.router.navigate(['/homepage']);
-    // }
+  async ngOnInit(): Promise<void> {
+    const email = sessionStorage.getItem('email');
+    if (email) {
+      (await this.employeeService.getEmployee(email)).subscribe(
+        (user: Employee) => {
+          if (user.role.name === 'Mecánico') {
+            this.userEmployee = user;
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text:
+                'No tiene permiso para acceder a este recurso! Redireccionando',
+              showConfirmButton: true,
+              confirmButtonColor: '#34c4b7',
+            });
+            this.router.navigate(['/homepage']);
+          }
+        },
+        (error) => {
+          console.error(error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Ha ocurrido un error. Intente más tarde. ',
+              showConfirmButton: true,
+              confirmButtonColor: '#34c4b7',
+            });
+          this.router.navigate(['/homepage']);
+        }
+      );
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+        showConfirmButton: true,
+        confirmButtonColor: '#34c4b7',
+      });
+      this.router.navigate(['/homepage']);
+    }
     this.APIVehicle.getVehicles().then(
       (data) => {
         if (data && data.length > 0) {

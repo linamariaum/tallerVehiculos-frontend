@@ -34,7 +34,7 @@ export class EmployeeService {
 
   async getEmployee(email: string) {
     return this.http
-      .get(this.urlApi + '/search?q=' + email);
+      .get(this.urlApi + '/' + email);
   }
 
   async createEmployee(employee: NewEmployeeRequests): Promise<Employee> {

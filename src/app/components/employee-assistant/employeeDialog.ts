@@ -5,7 +5,7 @@ import { NewEmployeeRequests } from 'src/app/models/dataRequests/newEmployee';
 import { UpdateEmployeeRequests } from 'src/app/models/dataRequests/updateEmployee';
 import { Role } from 'src/app/models/role';
 import { RoleService } from 'src/app/services/role.service';
-import * as bcrypt from 'bcryptjs';
+//import * as bcrypt from 'bcryptjs';
 
 @Component({
   selector: 'employee-dialog',
@@ -80,7 +80,8 @@ export class EmployeeDialog implements OnInit {
       const newEmployee: NewEmployeeRequests =
         {
           name: this.groupControl.get('nameInput').value,
-          password: bcrypt.hashSync(this.groupControl.get('passwordInput').value, 10),
+          password: this.groupControl.get('passwordInput').value,
+          //password: bcrypt.hashSync(this.groupControl.get('passwordInput').value, 10),
           email: this.groupControl.get('emailInput').value,
           cellphone: this.groupControl.get('cellphoneInput').value,
           roleId: this.groupControl.get('roleInput').value
@@ -95,7 +96,7 @@ export class EmployeeDialog implements OnInit {
       const updateInfo: UpdateEmployeeRequests =
       {
         cellphone: this.groupControl.get('cellphoneInput').value,
-        password: bcrypt.hashSync(this.groupControl.get('passwordInput').value, 10),
+        //password: bcrypt.hashSync(this.groupControl.get('passwordInput').value, 10),
         //newPassword: this.groupControl.get('newPasswordInput').value,
         roleId: +this.groupControl.get('roleInput').value
       }

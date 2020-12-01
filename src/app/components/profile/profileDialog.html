@@ -32,7 +32,7 @@
           </mat-form-field>
       </td>
     </tr>
-    <tr *ngIf="editField">
+    <!-- <tr *ngIf="editField">
       <td><mat-form-field>
         <mat-label>Contraseña actual</mat-label>
         <input matInput [disabled]="editField" value=""
@@ -43,15 +43,15 @@
         <input matInput [disabled]="editField && passwordWrote" value=""
         formControlName="newPasswordInput" required type="password">
       </mat-form-field></td>
-    </tr>
+    </tr> -->
     </table>
   </form>
   <br>
   <p *ngIf="editField">*Se habilitará el botón de envío cuando diligencie correctamente los campos.</p>
-  <p *ngIf="editField">*Para ingresar nueva contraseña, deberá escribir su contraseña actual.</p>
+  <!-- <p *ngIf="editField">*Para ingresar nueva contraseña, deberá escribir su contraseña actual.</p> -->
   <span style="color: red;"> {{getError('cellphoneInput')}}</span>
-  <span *ngIf="editField" style="color: red;"> {{getError('passwordInput')}}</span>
-  <span *ngIf="editField" style="color: red;"> {{getError('newPasswordInput')}}</span>
+  <!-- <span *ngIf="editField" style="color: red;"> {{getError('passwordInput')}}</span>
+  <span *ngIf="editField" style="color: red;"> {{getError('newPasswordInput')}}</span> -->
 
 
 </mat-dialog-content>

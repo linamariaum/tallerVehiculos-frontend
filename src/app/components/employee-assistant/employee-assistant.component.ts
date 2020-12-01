@@ -33,19 +33,8 @@ import { RoleService } from 'src/app/services/role.service';
   ],
 })
 export class EmployeeAssistantComponent implements OnInit {
-    userEmployee: Employee = {
-      id: 45,
-      name: 'Pepita Perez',
-      password: 'string;',
-      email: 'pepita@email.com',
-      cellphone: '123123213',
-      registryDate: 'string;',
-      removalDate: 'string;',
-      role: {
-        id: 3,
-        name: 'Supervisor'
-      }
-    };
+    userEmployee: Employee;
+    name = sessionStorage.getItem('name');
     employees: Employee[] = [];
     dataSource: MatTableDataSource<Employee>;
     columnsToDisplay: string[] = ['select', 'name', 'email', 'cellphone', 'role'];
@@ -61,10 +50,17 @@ export class EmployeeAssistantComponent implements OnInit {
     private router: Router, private roleService: RoleService) { }
 
   async ngOnInit() {
-    /*const email = sessionStorage.getItem('email');
+    this.roleService.getAll().subscribe(data => {
+      const datos = data;
+      this.roles = datos;
+    });
+    this.control = this.formBuilder.group({
+      controlRole: ['']
+    });
+    const email = sessionStorage.getItem('email');
     if ( email ) {
       (await this.employeeService.getEmployee(email)).subscribe((user: Employee) => {
-        if (user.role.name === 'Asistende de gerencia') {
+        if (user.role.name === 'Asistente de gerencia') {
           this.userEmployee = user;
         } else {
           Swal.fire({
@@ -90,15 +86,8 @@ export class EmployeeAssistantComponent implements OnInit {
         confirmButtonColor: '#34c4b7',
       });
       this.router.navigate(['/homepage']);
-    }*/
+    }
 
-    this.roleService.getAll().subscribe(data => {
-      const datos = data;
-      this.roles = datos;
-    });
-    this.control = this.formBuilder.group({
-      controlRole: ['']
-    });
     await this.loadEmployees();
     this.init(this.employees);
     this.onChanges();

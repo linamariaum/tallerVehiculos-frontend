@@ -67,7 +67,7 @@ export class LoginEmlpoyeeComponent implements OnInit {
         console.log(user)
         if (user) {
           this.user = user;
-          const match = await bcrypt.compare(login.password, user.password);
+          const match = await bcrypt.compare(this.loginEmployeeForm.get('passwordFormControl').value, user.password);
           if (match) {
             sessionStorage.setItem('email', this.user.email);
             // login

@@ -32,7 +32,10 @@ import { EmployeeAssistantComponent } from './components/employee-assistant/empl
 import { EmployeeDialog } from './components/employee-assistant/employeeDialog';
 import { ProfileDialog } from './components/profile/profileDialog';
 import { EmployeeSupervisorComponent } from './components/employee-supervisor/employee-supervisor.component';
-import { OwnerDialog } from './components/employee-supervisor/ownerDialog';
+import { OwnerDialogNo } from './components/employee-supervisor/ownerDialog';
+import { OwnerDialog } from './components/ownerDialog/owner-dialog'
+import { OwnerInfoDialog } from './components/ownerDialog/ownerInfo'
+import { from } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -45,13 +48,17 @@ import { OwnerDialog } from './components/employee-supervisor/ownerDialog';
     EmployeeAssistantComponent,
     EmployeeDialog,
     ProfileDialog,
+    OwnerDialogNo,
     OwnerDialog,
-    EmployeeSupervisorComponent
+    EmployeeSupervisorComponent,
+    OwnerInfoDialog
   ],
   entryComponents: [
     EmployeeDialog,
     ProfileDialog,
-    OwnerDialog
+    OwnerDialogNo,
+    OwnerDialog,
+    OwnerInfoDialog
   ],
   imports: [
     MatCheckboxModule,

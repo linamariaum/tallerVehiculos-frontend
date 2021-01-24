@@ -58,92 +58,66 @@ export class LoginEmlpoyeeComponent implements OnInit {
   async login() {
     const login = {
       email: this.loginEmployeeForm.get('emailFormControl').value,
-      //password: bcrypt.hashSync(this.loginEmployeeForm.get('passwordFormControl').value, 10)
       password: this.loginEmployeeForm.get('passwordFormControl').value
     };
     if ( login ) {
-      // Empleado
-      (await this.employeeService.getEmployee(login.email)).subscribe(async (user: Employee) => {
-        if (user) {
-          this.user = user;
-          //const match = await bcrypt.compare(this.loginEmployeeForm.get('passwordFormControl').value, user.password);
-          if (this.loginEmployeeForm.get('passwordFormControl').value === user.password) {
-            sessionStorage.setItem('email', this.user.email);
-            sessionStorage.setItem('name', this.user.name);
-            // login
-            await this.apiService.getUser(login).then(
-              async (data) => {
-                if (data) {
-                  console.log('Adquirido!');
-                  Swal.fire({
-                    icon: 'success',
-                    text: 'Ingresando...',
-                    showConfirmButton: true,
-                    confirmButtonColor: '#34c4b7',
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      switch (this.user.role.name) {
-                        case 'Asistente de gerencia':
-                          this.router.navigate(['employee-assistant']);
-                          break;
-                        case 'Supervisor':
-                          this.router.navigate(['employee-supervisor']);
-                          break;
-                        case 'Mecánico':
-                          this.router.navigate(['emlpoyee-technical']);
-                          break;
-                        default:
-                          this.router.navigate(['/homepage']);
-                          break;
-                      }
-                    }
-                  });
-                }
-              },
-              (error) => {
-                if (error.status == 401) {
-                  Swal.fire({
-                    icon: 'warning',
-                    text: 'Los datos ingresados son erróneos.',
-                    showConfirmButton: true,
-                    confirmButtonColor: '#34c4b7',
-                  });
-                } else {
-                  Swal.fire({
-                    icon: 'warning',
-                    text: 'Ha ocurrido un problema, intentelo más tarde.',
-                    showConfirmButton: true,
-                    confirmButtonColor: '#34c4b7',
-                  });
-                }
-                console.error(error);
-              }
-            );
+      // login
+      await this.apiService.getUser(login).then(
+        async (data) => {
+          if (data) {
+            console.log('Adquirido!');
+            // Empleado
+            await this.getEmployee(login.email);
+            const token = JSON.parse(data);
+            sessionStorage.setItem('cod', token.access_token);
+            Swal.fire({
+              icon: 'success',
+              text: 'Ingresando...',
+              showConfirmButton: true,
+              confirmButtonColor: '#34c4b7',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                sessionStorage.setItem('email', this.user.email);
+                sessionStorage.setItem('name', this.user.name);
 
-          } else {
+                switch (this.user.role.name) {
+                  case 'management-assistant':
+                    this.router.navigate(['employee-assistant']);
+                    break;
+                  case 'supervisor':
+                    this.router.navigate(['employee-supervisor']);
+                    break;
+                  case 'mechanic':
+                    this.router.navigate(['emlpoyee-technical']);
+                    break;
+                  default:
+                    this.router.navigate(['/homepage']);
+                    break;
+                }
+              }
+            });
+          }
+        },
+        (error) => {
+          if (error.status == 401) {
             Swal.fire({
               icon: 'warning',
               text: 'Los datos ingresados son erróneos.',
               showConfirmButton: true,
               confirmButtonColor: '#34c4b7',
             });
+          } else {
+            Swal.fire({
+              icon: 'warning',
+              text: 'Ha ocurrido un problema, intentelo más tarde.',
+              showConfirmButton: true,
+              confirmButtonColor: '#34c4b7',
+            });
           }
-
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'No tiene permiso para acceder a este recurso! Redireccionando',
-            showConfirmButton: true,
-            confirmButtonColor: '#34c4b7',
-          });
-          this.router.navigate(['/homepage']);
+          console.error(error);
         }
-      }, error => {
-        console.error(error)
-        this.router.navigate(['/homepage']);0
-      });
-//////////////////////
+      );
+
     } else {
       Swal.fire({
         icon: 'warning',
@@ -152,6 +126,27 @@ export class LoginEmlpoyeeComponent implements OnInit {
         confirmButtonColor: '#34c4b7',
       });
     }
+  }
+
+  async getEmployee(email) {
+    await this.employeeService.getEmployee(email).then(async (user: any) => {
+      if (user) {
+        const aux = JSON.parse(user);
+        this.user = aux;
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+          showConfirmButton: true,
+          confirmButtonColor: '#34c4b7',
+        });
+        this.router.navigate(['/homepage']);
+      }
+    }, error => {
+      console.error(error)
+      this.router.navigate(['/homepage']);
+    });
   }
 
 }

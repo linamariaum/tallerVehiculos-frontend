@@ -14,8 +14,9 @@ import { Owner } from 'src/app/models/Owner';
 import { EmployeeService } from 'src/app/services/employee.service';
 import { OwnerService } from 'src/app/services/owner.service';
 import Swal from 'sweetalert2';
+import { OwnerDialog } from '../ownerDialog/owner-dialog';
 import { ProfileDialog } from '../profile/profileDialog';
-import { OwnerDialog } from './ownerDialog';
+import { OwnerDialogNo } from './ownerDialog';
 
 @Component({
   selector: 'app-employee-supervisor',
@@ -51,8 +52,10 @@ export class EmployeeSupervisorComponent implements OnInit {
 
     const email = sessionStorage.getItem('email');
     if ( email ) {
-      (await this.employeeService.getEmployee(email)).subscribe((user: Employee) => {
-        if (user.role.name === 'Supervisor') {
+      await this.employeeService.getEmployee(email).then((userAux: any) => {
+        const user = JSON.parse(userAux);
+        console.log(user)
+        if (user.role.name === 'supervisor') {
           this.userEmployee = user;
         } else {
           Swal.fire({
@@ -150,12 +153,15 @@ export class EmployeeSupervisorComponent implements OnInit {
   }
 
   add() {
-    let ow: NewOwnerRequests = {
-      name: '',
-      email: '',
-      cellphone: ''
-    };
-    this.openDialog(ow, 'create');
+    // let ow: NewOwnerRequests = {
+    //   name: '',
+    //   email: '',
+    //   cellphone: ''
+    // };
+    // this.openDialog(ow, 'create');
+    const dialogRef = this.dialogSource.open(OwnerDialog, {
+      height: '100%',
+      width: '99.9%'});
   }
 
   update(owner) {
@@ -163,7 +169,7 @@ export class EmployeeSupervisorComponent implements OnInit {
   }
 
   openDialog(owner: any, type: string) {
-    const dialogRef = this.dialogSource.open(OwnerDialog, {
+    const dialogRef = this.dialogSource.open(OwnerDialogNo, {
       data: { owner: owner, type: type}
     });
     dialogRef.afterClosed().subscribe(result => {

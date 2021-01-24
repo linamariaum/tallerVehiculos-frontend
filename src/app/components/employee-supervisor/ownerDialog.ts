@@ -8,13 +8,13 @@ import { UpdateOwnerRequests } from 'src/app/models/dataRequests/updateOwner';
   selector: 'owner-dialog',
   templateUrl: 'ownerDialog.html',
 })
-export class OwnerDialog implements OnInit {
+export class OwnerDialogNo implements OnInit {
   title: string;
   editField: boolean;
   groupControl: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<OwnerDialog>,
+    public dialogRef: MatDialogRef<OwnerDialogNo>,
     @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   ngOnInit() {

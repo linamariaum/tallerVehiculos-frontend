@@ -59,8 +59,8 @@ export class EmployeeAssistantComponent implements OnInit {
     });
     const email = sessionStorage.getItem('email');
     if ( email ) {
-      (await this.employeeService.getEmployee(email)).subscribe((user: Employee) => {
-        if (user.role.name === 'Asistente de gerencia') {
+      await this.employeeService.getEmployee(email).then((user: Employee) => {
+        if (user.role.name === 'management-assistant') {
           this.userEmployee = user;
         } else {
           Swal.fire({

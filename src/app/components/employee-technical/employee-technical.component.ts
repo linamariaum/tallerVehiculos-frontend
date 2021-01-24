@@ -401,9 +401,9 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
   async ngOnInit(): Promise<void> {
     const email = sessionStorage.getItem('email');
     if (email) {
-      (await this.employeeService.getEmployee(email)).subscribe(
+      await this.employeeService.getEmployee(email).then(
         (user: Employee) => {
-          if (user.role.name === 'Mecánico') {
+          if (user.role.name === 'mechanic') {
             this.userEmployee = user;
           } else {
             Swal.fire({

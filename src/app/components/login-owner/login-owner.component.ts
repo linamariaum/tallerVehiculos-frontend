@@ -2,25 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
-  FormGroupDirective,
-  NgForm,
   Validators,
 } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(
-    control: FormControl | null,
-    form: FormGroupDirective | NgForm | null
-  ): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(
-      control &&
-      control.invalid &&
-      (control.dirty || control.touched || isSubmitted)
-    );
-  }
-}
+import { OwnerService } from 'src/app/services/owner.service';
 
 @Component({
   selector: 'app-login-owner',
@@ -28,31 +12,25 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./login-owner.component.scss'],
 })
 export class LoginOwnerComponent implements OnInit {
-  waitingToken: boolean = false;
-
   loginOwnerForm = new FormGroup({
     emailFormControl: new FormControl('', [
       Validators.required,
       Validators.email,
-    ]),
-    tokenFormControl: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-    ]),
+    ])
   });
 
-  matcher = new MyErrorStateMatcher();
-
-  constructor() {}
+  constructor(private ownerService: OwnerService) {}
 
   ngOnInit(): void {}
 
-  sendToken(form: FormGroup) {
-    console.log(form);
-    this.waitingToken = true;
+  sendToken() {
+    console.log(this.loginOwnerForm.get('emailFormControl').value);
+    const login = {
+      email: this.loginOwnerForm.get('emailFormControl').value,
+      //password: bcrypt.hashSync(this.loginEmployeeForm.get('passwordFormControl').value, 10)
+      password: 'password'
+    };
+    //this.ownerService.loginOwner(login);
   }
 
-  login(form: FormGroup) {
-    console.log(form);
-  }
 }

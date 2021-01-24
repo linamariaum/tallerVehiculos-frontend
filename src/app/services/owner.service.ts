@@ -7,7 +7,6 @@ import { Owner } from '../models/Owner';
 import { NewOwnerRequests } from '../models/dataRequests/newOwner';
 import { UpdateOwnerRequests } from '../models/dataRequests/updateOwner';
 
-
 const urlMapping = '/owners';
 const urlBase = environment.serviceURL;
 
@@ -22,20 +21,36 @@ export class OwnerService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
+      'Authorization': 'bearer '+sessionStorage.getItem('cod')
     }),
     responseType: 'text' as 'json',
   };
 
-  async getAllOwners(): Promise<Owner[]> {
+  async getAllOwners(): Promise<any> {
     return await this.http
-      .get<Owner[]>(this.urlApi)
+      .get<any>(this.urlApi, this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))
       .toPromise();
   }
 
-  async getOwner(id: string) {
+  async getOwner(id: number): Promise<any> {
     return this.http
-      .get(this.urlApi + '/' + id);
+      .get<any>(this.urlApi + '/' + id, this.httpOptions)
+      .pipe(retry(1), catchError(this.handleError))
+      .toPromise();
+  }
+
+  async getOwnerIdToken(id: string, token: string): Promise<any> {
+    return this.http
+      .get(this.urlApi + '/showDetails/' + id + '?token=' + token);
+  }
+
+  // email, password
+  async loginOwner(ownerLogin: any) {
+    return await this.http
+      .post<any>(urlBase+'/auth/token', JSON.stringify(ownerLogin), this.httpOptions)
+      .pipe(retry(1), catchError(this.handleError))
+      .toPromise();
   }
 
   async createOwner(employee: NewOwnerRequests): Promise<any> {
@@ -46,12 +61,12 @@ export class OwnerService {
   }
 
   async removeOwner(id: string) {
-    return this.http.delete(this.urlApi + '/' + id);
+    return this.http.delete(this.urlApi + '/' + id, this.httpOptions);
   }
 
   async updateOwner(id: number, employee: UpdateOwnerRequests): Promise<any> {
     return await this.http
-      .put(this.urlApi + '/' + id, employee)
+      .put(this.urlApi + '/' + id, employee, this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))
       .toPromise();
   }

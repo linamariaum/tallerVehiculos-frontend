@@ -1,0 +1,79 @@
+<div class="container" >
+  <div>
+    <h2 align="end">Bienvenido</h2>
+    <ng-container *ngIf="owner">
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td><mat-form-field class="example-full-width" style="margin-right: 2rem;">
+            <mat-label>Nombres</mat-label>
+            <input matInput disabled value="{{owner.name}}">
+          </mat-form-field></td>
+          <td><mat-form-field class="example-full-width" style="margin-right: 2rem;">
+            <mat-label>Correo</mat-label>
+            <input matInput disabled value="{{owner.email}}">
+          </mat-form-field></td>
+          <td><mat-form-field class="example-full-width">
+            <mat-label>Teléfono</mat-label>
+            <input matInput disabled value="{{owner.cellphone}}">
+          </mat-form-field></td>
+        </tr>
+      </table>
+  </ng-container>
+  </div>
+  <br>
+  <h3><b>Vehículos:</b></h3>
+  <mat-form-field>
+    <mat-label>Filtrar</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ejm. 20201">
+  </mat-form-field>
+
+  <div class="scroll mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
+
+      <!-- vehicleType.name Column -->
+      <ng-container matColumnDef="vehicleType.name">
+        <th mat-header-cell *matHeaderCellDef> TIPO DE VEHÍCULO </th>
+        <td mat-cell *matCellDef="let element" style="text-align: justify;">
+          {{element.vehicleType.name}}
+      </td>
+      </ng-container>
+
+      <!-- plate Column -->
+      <ng-container matColumnDef="plate">
+        <th mat-header-cell *matHeaderCellDef> PLACA </th>
+        <td mat-cell *matCellDef="let element"> {{element.plate}} </td>
+      </ng-container>
+
+      <!-- brand Colum -->
+      <ng-container matColumnDef="brand">
+        <th mat-header-cell *matHeaderCellDef> MARCA </th>
+        <td mat-cell *matCellDef="let element" style="text-align: justify;">{{element.brand}}</td>
+      </ng-container>
+
+      <!-- model Colum -->
+      <ng-container matColumnDef="model">
+        <th mat-header-cell *matHeaderCellDef> MODELO </th>
+        <td mat-cell *matCellDef="let element" style="text-align: justify;">{{element.model}}</td>
+      </ng-container>
+
+      <!-- color Column-->
+      <ng-container matColumnDef="color">
+        <th mat-header-cell *matHeaderCellDef> COLOR </th>
+        <td mat-cell *matCellDef="let element"> {{element.color}} </td>
+      </ng-container>
+
+      <!-- state.name Column -->
+      <ng-container matColumnDef="state.name">
+        <th mat-header-cell *matHeaderCellDef> ESTADO ACTUAL </th>
+        <td mat-cell *matCellDef="let element" style="text-align: justify;">
+          <b>{{element.state.name}}</b>
+      </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+    </table>
+    <mat-spinner *ngIf="spinner" diameter="30" style="margin:0 auto;"></mat-spinner>
+    <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+  </div>
+</div>

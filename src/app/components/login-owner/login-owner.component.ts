@@ -4,7 +4,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { OwnerService } from 'src/app/services/owner.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login-owner',
@@ -19,7 +21,7 @@ export class LoginOwnerComponent implements OnInit {
     ])
   });
 
-  constructor(private ownerService: OwnerService) {}
+  constructor(private ownerService: OwnerService, private router: Router) {}
 
   ngOnInit(): void {}
 
@@ -27,10 +29,17 @@ export class LoginOwnerComponent implements OnInit {
     console.log(this.loginOwnerForm.get('emailFormControl').value);
     const login = {
       email: this.loginOwnerForm.get('emailFormControl').value,
-      //password: bcrypt.hashSync(this.loginEmployeeForm.get('passwordFormControl').value, 10)
       password: 'password'
     };
-    //this.ownerService.loginOwner(login);
+    this.ownerService.loginOwner(login);
+    Swal.fire({
+      icon: 'info',
+      title: 'Se envió enlace de acceso a su correo',
+      showConfirmButton: true,
+      confirmButtonColor: '#34c4b7',
+    }).then(async (result) => {
+      this.router.navigate(['/homepage']);
+    })
   }
 
 }

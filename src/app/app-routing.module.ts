@@ -6,6 +6,7 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { EmployeeAssistantComponent } from './components/employee-assistant/employee-assistant.component';
 import { EmployeeSupervisorComponent } from './components/employee-supervisor/employee-supervisor.component';
 import { EmployeeTechnicalComponent } from './components/employee-technical/employee-technical.component';
+import { OwnerComponent } from './components/owner/owner.component';
 
 const routes: Routes = [
   { path: 'employee-assistant', component: EmployeeAssistantComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'emlpoyee-technical', component: EmployeeTechnicalComponent },
   { path: 'login-owner', component: LoginOwnerComponent },
   { path: 'login-emlpoyee', component: LoginEmlpoyeeComponent },
+  { path: 'owner', component: OwnerComponent },
   { path: 'homepage', component: HomepageComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'homepage' }
 ];

@@ -40,9 +40,11 @@ export class OwnerService {
       .toPromise();
   }
 
-  async getOwnerIdToken(id: string, token: string): Promise<any> {
+  async getOwnerShowDetails(id: string, token: string): Promise<any> {
     return this.http
-      .get(this.urlApi + '/showDetails/' + id + '?token=' + token);
+      .get<any>(this.urlApi + '/showDetails/' + id + '?token=' + token)
+      .pipe(retry(1), catchError(this.handleError))
+      .toPromise();
   }
 
   // email, password

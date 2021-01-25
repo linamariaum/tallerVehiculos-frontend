@@ -91,8 +91,7 @@ export class OwnerComponent implements OnInit {
 
   loadOwnerInfo() {
     return this.ownerService.getOwnerShowDetails(this.idOwner, this.token).then(
-      (result) => {
-        const data = JSON.parse(result);
+      (data) => {
         if (data) {
           this.owner = {
             id: data.ownerInfo.id,

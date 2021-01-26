@@ -40,7 +40,11 @@ export class LoginEmlpoyeeComponent implements OnInit {
   error: boolean;
   matcher = new MyErrorStateMatcher();
 
-  constructor(private router: Router, private apiService: AuthService, private employeeService: EmployeeService) {
+  constructor(
+    private router: Router,
+    private apiService: AuthService,
+    private employeeService: EmployeeService
+  ) {
     this.loginEmployeeForm = new FormGroup({
       emailFormControl: new FormControl('', [
         Validators.required,
@@ -58,9 +62,9 @@ export class LoginEmlpoyeeComponent implements OnInit {
   async login() {
     const login = {
       email: this.loginEmployeeForm.get('emailFormControl').value,
-      password: this.loginEmployeeForm.get('passwordFormControl').value
+      password: this.loginEmployeeForm.get('passwordFormControl').value,
     };
-    if ( login ) {
+    if (login) {
       // login
       await this.apiService.getUser(login).then(
         async (data) => {
@@ -117,7 +121,6 @@ export class LoginEmlpoyeeComponent implements OnInit {
           console.error(error);
         }
       );
-
     } else {
       Swal.fire({
         icon: 'warning',
@@ -148,5 +151,4 @@ export class LoginEmlpoyeeComponent implements OnInit {
       this.router.navigate(['/homepage']);
     });
   }
-
 }

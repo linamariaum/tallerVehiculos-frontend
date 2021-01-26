@@ -54,9 +54,9 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
   openProfileDialog(employee: Employee) {
     const id = employee.id;
     const dialogRef = this.employeeDialog.open(ProfileDialog, {
-      data: { employee: employee}
+      data: { employee: employee },
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.updateEmployee(id, result.employee);
       }
@@ -64,17 +64,19 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
   }
 
   async updateEmployee(id: number, updateEmployee: UpdateEmployeeRequests) {
-    return this.employeeService.updateEmployee(id, updateEmployee). then(
+    return this.employeeService.updateEmployee(id, updateEmployee).then(
       async (data) => {
         if (data) {
+          data = JSON.parse(data);
           Swal.fire({
             icon: 'success',
             title: 'Información del empleado actualizada correctamente.',
             showConfirmButton: true,
-            confirmButtonColor: '#34c4b7'
+            confirmButtonColor: '#34c4b7',
           });
         }
-      }, (error) => {
+      },
+      (error) => {
         console.error(error);
       }
     );
@@ -206,20 +208,23 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
           };
           this.APIVehicle.createVehicle(newVehicle).then(
             (data) => {
-              if (data && data.length > 0) {
-                var response: any = {
-                  plate: result.value[0],
-                  brand: result.value[1],
-                  model: result.value[2],
-                  color: result.value[3],
-                  vehicleType: this.getVehicleTypeById(
-                    JSON.parse(data).vehicleTypeId
-                  ),
-                  state: this.getStateById(JSON.parse(data).stateId),
-                  id: JSON.parse(data).id,
-                };
-                this.dataSource.data.push(response);
-                return (this.dataSource.filter = '');
+              if (data) {
+                data = JSON.parse(data);
+                if (data.length > 0) {
+                  var response: any = {
+                    plate: result.value[0],
+                    brand: result.value[1],
+                    model: result.value[2],
+                    color: result.value[3],
+                    vehicleType: this.getVehicleTypeById(
+                      JSON.parse(data).vehicleTypeId
+                    ),
+                    state: this.getStateById(JSON.parse(data).stateId),
+                    id: JSON.parse(data).id,
+                  };
+                  this.dataSource.data.push(response);
+                  return (this.dataSource.filter = '');
+                }
               }
             },
             (error) => {
@@ -256,6 +261,7 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
     this.APIVehicle.deleteVehicle(element.id).then(
       (data) => {
         if (data) {
+          data = JSON.parse(data);
           var i = this.dataSource.data.indexOf(element);
           this.dataSource.data.splice(i, 1);
           return (this.dataSource.filter = '');
@@ -360,6 +366,7 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
             this.APIVehicle.updateVehicle(data.id, newVehicle).then(
               (result) => {
                 if (result) {
+                  result = JSON.parse(result);
                   var i = this.dataSource.data.indexOf(element);
                   this.dataSource.data[i] = data;
                   return (this.dataSource.filter = '');
@@ -397,36 +404,67 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
     public employeeDialog: MatDialog,
     private employeeService: EmployeeService
   ) {}
-
   async ngOnInit(): Promise<void> {
     const email = sessionStorage.getItem('email');
     if (email) {
-      await this.employeeService.getEmployee(email).then(
-        (user: Employee) => {
-          if (user.role.name === 'mechanic') {
-            this.userEmployee = user;
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text:
-                'No tiene permiso para acceder a este recurso! Redireccionando',
-              showConfirmButton: true,
-              confirmButtonColor: '#34c4b7',
-            });
-            this.router.navigate(['/homepage']);
-          }
+      this.APIVehicle.getVehicles().then(
+        (data) => {
+          if (data) {
+            data = JSON.parse(data);
+            if (data.length > 0) {
+              this.Vehicles = data;
+
+              this.employeeService.getEmployee(email).then(
+                (user: any) => {
+                  user = JSON.parse(user);
+                  if (user.role.name === 'mechanic') {
+                    this.userEmployee = user;
+                    this.APIVehicle.getVehiclesByTechnicalId(user.id).then(
+                      (data) => {
+                        data = JSON.parse(data);
+                        var vehicles = [];
+                        for (let index = 0; index < data.length; index++) {
+                          this.Vehicles.forEach((vehicle) => {
+                            if (vehicle.id == data[index].vehicleId) {
+                              vehicles[index] = vehicle;
+                            }
+                          });
+                        }
+                        this.dataSource = new MatTableDataSource(vehicles);
+                        this.dataSource.filter = '';
+                      },
+                      (error) => {
+                        console.error(error);
+                      }
+                    );
+                  } else {
+                    Swal.fire({
+                      icon: 'error',
+                      title: 'Oops...',
+                      text:
+                        'No tiene permiso para acceder a este recurso! Redireccionando',
+                      showConfirmButton: true,
+                      confirmButtonColor: '#34c4b7',
+                    });
+                    this.router.navigate(['/homepage']);
+                  }
+                },
+                (error) => {
+                  console.error(error);
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ha ocurrido un error. Intente más tarde. ',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#34c4b7',
+                  });
+                  this.router.navigate(['/homepage']);
+                }
+              );
+            }
         },
         (error) => {
           console.error(error);
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Ha ocurrido un error. Intente más tarde. ',
-              showConfirmButton: true,
-              confirmButtonColor: '#34c4b7',
-            });
-          this.router.navigate(['/homepage']);
         }
       );
     } else {
@@ -439,22 +477,13 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
       });
       this.router.navigate(['/homepage']);
     }
-    this.APIVehicle.getVehicles().then(
-      (data) => {
-        if (data && data.length > 0) {
-          this.Vehicles = data;
-          this.dataSource = new MatTableDataSource(this.Vehicles);
-          this.dataSource.filter = '';
-        }
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
     this.APIVehicle.getStates().then(
       (data) => {
-        if (data && data.length > 0) {
-          this.states = data;
+        if (data) {
+          data = JSON.parse(data);
+          if (data.length > 0) {
+            this.states = data;
+          }
         }
       },
       (error) => {
@@ -463,8 +492,11 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
     );
     this.APIVehicle.getVehicleTypes().then(
       (data) => {
-        if (data && data.length > 0) {
-          this.vehicleTypes = data;
+        if (data) {
+          data = JSON.parse(data);
+          if (data.length > 0) {
+            this.vehicleTypes = data;
+          }
         }
       },
       (error) => {

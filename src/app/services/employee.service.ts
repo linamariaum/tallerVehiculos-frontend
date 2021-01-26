@@ -11,12 +11,12 @@ const urlMapping = '/employees';
 const urlBase = environment.serviceURL;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EmployeeService {
   private urlApi = urlBase + urlMapping;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   httpOptions = {
     headers: new HttpHeaders({
@@ -37,7 +37,7 @@ export class EmployeeService {
     return this.http
       .get<Employee>(this.urlApi + '/' + email, this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))
-      .toPromise();;
+      .toPromise();
   }
 
   async createEmployee(employee: NewEmployeeRequests): Promise<Employee> {
@@ -51,7 +51,10 @@ export class EmployeeService {
     return this.http.delete(this.urlApi + '/' + id, this.httpOptions);
   }
 
-  async updateEmployee(id: number, employee: UpdateEmployeeRequests): Promise<any> {
+  async updateEmployee(
+    id: number,
+    employee: UpdateEmployeeRequests
+  ): Promise<any> {
     return await this.http
       .put(this.urlApi + '/' + id, employee, this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))
@@ -71,5 +74,4 @@ export class EmployeeService {
     }
     return throwError(errorMessage);
   }
-
 }

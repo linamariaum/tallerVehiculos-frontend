@@ -1,5 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -33,34 +39,39 @@ import { RoleService } from 'src/app/services/role.service';
   ],
 })
 export class EmployeeAssistantComponent implements OnInit {
-    userEmployee: Employee;
-    name = sessionStorage.getItem('name');
-    employees: Employee[] = [];
-    dataSource: MatTableDataSource<Employee>;
-    columnsToDisplay: string[] = ['select', 'name', 'email', 'cellphone', 'role'];
-    expandedElement: Employee | null;
-    selection: any = new SelectionModel<Employee>(true, []);
-    @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
-    @ViewChild(MatSort, {static: true}) sort: MatSort;
-    spinner: boolean = true;
-    control: FormGroup;
-    roles: Role[];
+  userEmployee: Employee;
+  name = sessionStorage.getItem('name');
+  employees: Employee[] = [];
+  dataSource: MatTableDataSource<Employee>;
+  columnsToDisplay: string[] = ['select', 'name', 'email', 'cellphone', 'role'];
+  expandedElement: Employee | null;
+  selection: any = new SelectionModel<Employee>(true, []);
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  spinner: boolean = true;
+  control: FormGroup;
+  roles: Role[];
 
-  constructor(private formBuilder: FormBuilder, private employeeService: EmployeeService, public employeeDialog: MatDialog,
-    private router: Router, private roleService: RoleService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private employeeService: EmployeeService,
+    public employeeDialog: MatDialog,
+    private router: Router,
+    private roleService: RoleService
+  ) {}
 
   async ngOnInit() {
-    this.roleService.getAll().subscribe(data => {
+    this.roleService.getAll().subscribe((data) => {
       const datos = data;
       this.roles = datos;
     });
     this.control = this.formBuilder.group({
-      controlRole: ['']
+      controlRole: [''],
     });
     const email = sessionStorage.getItem('email');
     if ( email ) {
-      (await this.employeeService.getEmployee(email)).subscribe((user: Employee) => {
-        if (user.role.name === 'Asistente de gerencia') {
+      await this.employeeService.getEmployee(email).then((user: Employee) => {
+        if (user.role.name === 'management-assistant') {
           this.userEmployee = user;
         } else {
           Swal.fire({
@@ -72,11 +83,7 @@ export class EmployeeAssistantComponent implements OnInit {
           });
           this.router.navigate(['/homepage']);
         }
-      }, error => {
-        console.error(error)
-        this.errorService();
-        this.router.navigate(['/homepage']);
-      });
+      );
     } else {
       Swal.fire({
         icon: 'error',
@@ -101,29 +108,29 @@ export class EmployeeAssistantComponent implements OnInit {
   }
 
   onChanges() {
-    this.control.get('controlRole').valueChanges.subscribe(
-      selectedRole => {
-        if(selectedRole != '0') {
-          let employeeFilter = this.searchEmployeeByRole(selectedRole);
-          if (employeeFilter.length > 0) {
-            this.init(employeeFilter);
-          } else {
-            Swal.fire({
-              title: `No se encontraron empleados para el cargo ${this.searchNameByRole(selectedRole)}`,
-              confirmButtonColor: '#34c4b7'
-            });
-          }
+    this.control.get('controlRole').valueChanges.subscribe((selectedRole) => {
+      if (selectedRole != '0') {
+        let employeeFilter = this.searchEmployeeByRole(selectedRole);
+        if (employeeFilter.length > 0) {
+          this.init(employeeFilter);
         } else {
-          // Renderiza todos los empleados
-          this.init(this.employees);
+          Swal.fire({
+            title: `No se encontraron empleados para el cargo ${this.searchNameByRole(
+              selectedRole
+            )}`,
+            confirmButtonColor: '#34c4b7',
+          });
         }
+      } else {
+        // Renderiza todos los empleados
+        this.init(this.employees);
       }
-    );
+    });
   }
 
   searchEmployeeByRole(idRole: number): Employee[] {
     let employeesFilter: Employee[] = [];
-    this.employees.forEach(element => {
+    this.employees.forEach((element) => {
       if (element.role.id === idRole) {
         employeesFilter.push(element);
       }
@@ -134,7 +141,7 @@ export class EmployeeAssistantComponent implements OnInit {
   searchNameByRole(idRole: string): string {
     const id = +idRole;
     let name = '';
-    this.roles.forEach(element => {
+    this.roles.forEach((element) => {
       if (element.id === id) {
         name = element.name;
       }
@@ -146,7 +153,7 @@ export class EmployeeAssistantComponent implements OnInit {
     return this.employeeService.getAllEmployees().then(
       (data) => {
         if (data && data.length > 0) {
-          data.forEach(element => {
+          data.forEach((element) => {
             let employee: Employee = {
               id: element.id,
               name: element.name,
@@ -157,14 +164,15 @@ export class EmployeeAssistantComponent implements OnInit {
               removalDate: element.removalDate,
               role: {
                 id: element.roleId,
-                name: this.searchNameByRole(element.roleId)
-              }
-            }
+                name: this.searchNameByRole(element.roleId),
+              },
+            };
             this.employees.push(employee);
           });
           this.spinner = false;
         }
-      }, (error) => {
+      },
+      (error) => {
         console.error(error);
         this.spinner = false;
         this.errorService();
@@ -179,9 +187,9 @@ export class EmployeeAssistantComponent implements OnInit {
   openProfileDialog(employee: Employee) {
     const id = employee.id;
     const dialogRef = this.employeeDialog.open(ProfileDialog, {
-      data: { employee: employee}
+      data: { employee: employee },
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.spinner = true;
         this.updateEmployee(id, result.employee);
@@ -195,7 +203,7 @@ export class EmployeeAssistantComponent implements OnInit {
       name: '',
       email: '',
       cellphone: '',
-      roleId: 0
+      roleId: 0,
     };
     this.openDialog(empl, 'create');
   }
@@ -206,14 +214,14 @@ export class EmployeeAssistantComponent implements OnInit {
 
   openDialog(employee: any, type: string) {
     const dialogRef = this.employeeDialog.open(EmployeeDialog, {
-      data: { employee: employee, type: type}
+      data: { employee: employee, type: type },
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         if (result.type === 'create') {
           this.spinner = true;
           this.createEmployee(result.employee);
-        } else if ( result.type === 'update') {
+        } else if (result.type === 'update') {
           this.spinner = true;
           const id = employee.id;
           this.updateEmployee(id, result.employee);
@@ -230,13 +238,14 @@ export class EmployeeAssistantComponent implements OnInit {
             icon: 'success',
             title: `Empleado agregado exitosamente.`,
             showConfirmButton: true,
-            confirmButtonColor: '#34c4b7'
+            confirmButtonColor: '#34c4b7',
           });
-          this.employees= [];
+          this.employees = [];
           await this.loadEmployees();
           this.init(this.employees);
         }
-      }, (error) => {
+      },
+      (error) => {
         console.error(error);
         this.errorService();
         this.spinner = false;
@@ -245,27 +254,27 @@ export class EmployeeAssistantComponent implements OnInit {
   }
 
   async updateEmployee(id: number, updateEmployee: UpdateEmployeeRequests) {
-    return this.employeeService.updateEmployee(id, updateEmployee). then(
+    return this.employeeService.updateEmployee(id, updateEmployee).then(
       async (data) => {
         if (data) {
           Swal.fire({
             icon: 'success',
             title: 'Información del empleado actualizada correctamente.',
             showConfirmButton: true,
-            confirmButtonColor: '#34c4b7'
+            confirmButtonColor: '#34c4b7',
           });
-          this.employees= [];
+          this.employees = [];
           await this.loadEmployees();
           this.init(this.employees);
         }
-      }, (error) => {
+      },
+      (error) => {
         console.error(error);
         this.errorService();
         this.spinner = false;
       }
     );
   }
-
 
   remove(employee) {
     Swal.fire({
@@ -275,27 +284,32 @@ export class EmployeeAssistantComponent implements OnInit {
       confirmButtonColor: '#34c4b7',
       cancelButtonColor: '#2b6f54',
       confirmButtonText: 'Sí, eliminar!',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then(async (result) => {
       if (result.value) {
         // Desvincular los autos o tecnicos asociados (?)
         // Eliminar
-        (await this.employeeService.removeEmployee(employee.id)).subscribe(result => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Eliminado!',
-            showConfirmButton: false,
-            timer: 1500
-          });
-          const index: number = this.employees.indexOf(this.searchEmployeeById(employee.id));
-          if (index !== -1) {
+        (await this.employeeService.removeEmployee(employee.id)).subscribe(
+          (result) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Eliminado!',
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            const index: number = this.employees.indexOf(
+              this.searchEmployeeById(employee.id)
+            );
+            if (index !== -1) {
               this.employees.splice(index, 1);
+            }
+            this.init(this.employees);
+          },
+          (error) => {
+            console.error(error);
+            this.errorService();
           }
-          this.init(this.employees);
-        }, (error) => {
-          console.error(error);
-          this.errorService();
-        });
+        );
       }
     });
   }
@@ -313,29 +327,36 @@ export class EmployeeAssistantComponent implements OnInit {
       confirmButtonColor: '#34c4b7',
       cancelButtonColor: '#2b6f54',
       confirmButtonText: 'Sí, eliminar!',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then(async (result) => {
       if (result.value) {
         // Desvincular los autos o tecnicos asociados (?)
         // Eliminar
         for (const employeeDelete of employeesToDelete) {
-          const index: number = this.employees.indexOf(this.searchEmployeeById(employeeDelete.id));
+          const index: number = this.employees.indexOf(
+            this.searchEmployeeById(employeeDelete.id)
+          );
           if (index !== -1) {
-              this.employees.splice(index, 1);
+            this.employees.splice(index, 1);
           }
-          (await this.employeeService.removeEmployee(employeeDelete.id)).subscribe(result => {
-             this.init(this.employees);
-          }, error => {
-            console.error(error);
-            this.errorService();
-          });
+          (
+            await this.employeeService.removeEmployee(employeeDelete.id)
+          ).subscribe(
+            (result) => {
+              this.init(this.employees);
+            },
+            (error) => {
+              console.error(error);
+              this.errorService();
+            }
+          );
         }
         this.selection.selected.length = 0;
         Swal.fire({
           icon: 'success',
           title: 'Eliminado!',
           showConfirmButton: false,
-          timer: 1500
+          timer: 1500,
         });
       }
     });
@@ -356,12 +377,12 @@ export class EmployeeAssistantComponent implements OnInit {
       text: 'Ha ocurrido un problema en el servidor!',
       showConfirmButton: true,
       confirmButtonColor: '#34c4b7',
-    })
+    });
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    if ( !this.spinner ) {
+    if (!this.spinner) {
       const numSelected = this.selection.selected.length;
       const numRows = this.dataSource.data.length;
       return numSelected === numRows;
@@ -392,5 +413,4 @@ export class EmployeeAssistantComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
 }

@@ -1,14 +1,12 @@
 <div>
-  <mat-card class="container mat-elevation-z5" style="width: 20%">
+  <mat-card class="container mat-elevation-z5" style="width: 50%">
     <mat-card-header>
       <mat-card-title class="title color-white">Iniciar sesión</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form
-        *ngIf="!waitingToken"
         class="example-form"
         [formGroup]="loginOwnerForm"
-        (ngSubmit)="sendToken(loginOwnerForm)"
       >
         <mat-form-field class="example-full-width">
           <mat-label>Correo electrónico</mat-label>
@@ -19,35 +17,28 @@
             type="email"
             placeholder="Ex. pat@example.com"
           />
+          <mat-error *ngIf="loginOwnerForm.get('emailFormControl').hasError('email') &&
+            !loginOwnerForm.get('emailFormControl').hasError('required')">
+            Por favor ingrese un correo electrónico válido
+          </mat-error>
+          <mat-error *ngIf="loginOwnerForm.get('emailFormControl').hasError('required')">
+            El correo electónico es <strong>requerido</strong>
+          </mat-error>
         </mat-form-field>
-        <div align="center">
-          <button align="center" mat-button class="color-blue" type="submit">
-            Enviar token
-          </button>
-        </div>
-      </form>
-
-      <form
-        *ngIf="waitingToken"
-        class="example-form"
-        [formGroup]="loginOwnerForm"
-        (ngSubmit)="login(loginOwnerForm)"
-      >
-        <mat-form-field class="example-full-width">
-          <mat-label>Token</mat-label>
-          <input
-            matInput
-            required
-            formControlName="tokenFormControl"
-            type="password"
-          />
-        </mat-form-field>
-        <div align="center">
-          <button align="center" mat-button class="color-blue" type="submit">
-            Aceptar
-          </button>
-        </div>
       </form>
     </mat-card-content>
+    <br>
+    <p>*Se habilitará el botón de aceptar cuando diligencie correctamente los campos.</p>
+    <br>
+    <mat-card-actions align="center">
+      <ng-container *ngIf="!loginOwnerForm.invalid;else groupInvalid">
+        <button mat-button [disabled]="loginOwnerForm.invalid" class="color-blue"
+        (click)="sendToken()" type="submit">Enviar token</button>
+      </ng-container>
+      <ng-template #groupInvalid>
+        <button mat-button style="color:#505853; background-color: rgba(248, 237, 237, 0.589);"
+        [disabled]="loginOwnerForm.invalid">Enviar token</button>
+      </ng-template>
+    </mat-card-actions>
   </mat-card>
 </div>

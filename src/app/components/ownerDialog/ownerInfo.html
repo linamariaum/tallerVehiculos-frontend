@@ -1,0 +1,46 @@
+<div align="center">
+<h3 mat-dialog-title style="font-weight: bold; font-size: large;">{{title}}</h3>
+<mat-dialog-content class="mat-typography" style="height: 100%;">
+  <br>
+  <form [formGroup]="groupControl">
+      <table style="width: 50%;">
+        <tr>
+          <td><mat-form-field>
+            <mat-label>Nombres y apellidos</mat-label>
+            <input matInput [disabled]="editField" value="{{owner.name}}"
+            formControlName="nameInput" required type="text">
+          </mat-form-field>
+          <mat-error>{{getError('nameInput')}}</mat-error></td>
+        </tr>
+        <tr>
+          <td><mat-form-field>
+            <mat-label>Correo</mat-label>
+            <input matInput value="{{owner.email}}"
+            formControlName="emailInput" required type="email">
+          </mat-form-field>
+          <mat-error>{{getError('emailInput')}}</mat-error>
+        </td>
+        </tr>
+        <tr>
+          <td><mat-form-field>
+            <mat-label>Teléfono</mat-label>
+            <input matInput value="{{owner.cellphone}}"
+            formControlName="cellphoneInput" required type="number">
+          </mat-form-field>
+          <mat-error>{{getError('cellphoneInput')}}</mat-error></td>
+        </tr>
+      </table>
+  </form>
+  <br>
+  <p>*Se habilitará el botón de envío cuando diligencie correctamente los campos.</p>
+  <br>
+  <ng-container *ngIf="!groupControl.invalid;else groupInvalid">
+    <button mat-button type="submit" (click)="save()" style="background-color: #34c4b7; margin-right: 1rem;">Guardar</button>
+  </ng-container>
+  <ng-template #groupInvalid>
+    <button mat-button style="margin-right: 1rem;" disabled>Guardar</button>
+  </ng-template>
+  <button mat-button align="end" (click)="backward()" type="reset" style="background-color: #2b6f54;">Volver</button>
+
+</mat-dialog-content>
+</div>

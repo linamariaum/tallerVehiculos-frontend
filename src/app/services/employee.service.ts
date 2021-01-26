@@ -11,30 +11,33 @@ const urlMapping = '/employees';
 const urlBase = environment.serviceURL;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EmployeeService {
   private urlApi = urlBase + urlMapping;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
+      'Authorization': 'bearer '+sessionStorage.getItem('cod')
     }),
     responseType: 'text' as 'json',
   };
 
   async getAllEmployees(): Promise<any[]> {
     return await this.http
-      .get<any[]>(this.urlApi)
+      .get<any[]>(this.urlApi, this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))
       .toPromise();
   }
 
-  async getEmployee(email: string) {
+  async getEmployee(email: string): Promise<Employee> {
     return this.http
-      .get(this.urlApi + '/' + email);
+      .get<Employee>(this.urlApi + '/' + email, this.httpOptions)
+      .pipe(retry(1), catchError(this.handleError))
+      .toPromise();
   }
 
   async createEmployee(employee: NewEmployeeRequests): Promise<Employee> {
@@ -45,12 +48,15 @@ export class EmployeeService {
   }
 
   async removeEmployee(id: string) {
-    return this.http.delete(this.urlApi + '/' + id);
+    return this.http.delete(this.urlApi + '/' + id, this.httpOptions);
   }
 
-  async updateEmployee(id: number, employee: UpdateEmployeeRequests): Promise<any> {
+  async updateEmployee(
+    id: number,
+    employee: UpdateEmployeeRequests
+  ): Promise<any> {
     return await this.http
-      .put(this.urlApi + '/' + id, employee)
+      .put(this.urlApi + '/' + id, employee, this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))
       .toPromise();
   }
@@ -68,5 +74,4 @@ export class EmployeeService {
     }
     return throwError(errorMessage);
   }
-
 }

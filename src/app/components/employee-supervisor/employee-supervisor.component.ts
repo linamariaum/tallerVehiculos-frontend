@@ -17,7 +17,7 @@ import { EmployeeService } from 'src/app/services/employee.service';
 import Swal from 'sweetalert2';
 import { VehicleService } from 'src/app/services/vehicle.service';
 import { Vehicle } from 'src/app/models/vehicle';
-// import { OwnerDialog } from '../ownerDialog/owner-dialog';
+import { OwnerDialog } from '../ownerDialog/owner-dialog';
 import { ProfileDialog } from '../profile/profileDialog';
 
 @Component({
@@ -197,10 +197,10 @@ export class EmployeeSupervisorComponent implements OnInit {
   }
 
   gestionaPropietario() {
-    // const dialogRef = this.dialogSource.open(OwnerDialog, {
-    //   height: '100%',
-    //   width: '99.9%',
-    // });
+    const dialogRef = this.dialogSource.open(OwnerDialog, {
+      height: '100%',
+      width: '99.9%',
+    });
   }
 
   searchNameTechinal(index, id) {

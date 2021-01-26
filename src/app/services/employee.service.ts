@@ -21,7 +21,7 @@ export class EmployeeService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: 'bearer ' + sessionStorage.getItem('cod'),
+      'Authorization': 'bearer '+sessionStorage.getItem('cod')
     }),
     responseType: 'text' as 'json',
   };

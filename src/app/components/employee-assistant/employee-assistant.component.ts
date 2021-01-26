@@ -69,26 +69,18 @@ export class EmployeeAssistantComponent implements OnInit {
       controlRole: [''],
     });
     const email = sessionStorage.getItem('email');
-    if (email) {
-      await this.employeeService.getEmployee(email).then(
-        (user: Employee) => {
-          if (user.role.name === 'Asistente de gerencia') {
-            this.userEmployee = user;
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text:
-                'No tiene permiso para acceder a este recurso! Redireccionando',
-              showConfirmButton: true,
-              confirmButtonColor: '#34c4b7',
-            });
-            this.router.navigate(['/homepage']);
-          }
-        },
-        (error) => {
-          console.error(error);
-          this.errorService();
+    if ( email ) {
+      await this.employeeService.getEmployee(email).then((user: Employee) => {
+        if (user.role.name === 'management-assistant') {
+          this.userEmployee = user;
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+            showConfirmButton: true,
+            confirmButtonColor: '#34c4b7',
+          });
           this.router.navigate(['/homepage']);
         }
       );

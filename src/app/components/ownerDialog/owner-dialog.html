@@ -1,0 +1,64 @@
+<h2 mat-dialog-title style="font-weight: bold; font-size: large;">{{title}}</h2>
+<mat-dialog-content class="mat-typography" style="height: 100%;">
+  <div mat-dialog-actions align="end">
+    <button mat-button class="color-blue" (click)="addOwner()">
+      <mat-icon>person_add</mat-icon> Agregar
+    </button>
+  </div>
+  <br>
+  <owner-info-dialog *ngIf="edit"
+      [idOwner] = "id"
+      [operationType] = "operationType"
+      (changes)="receiveReply($event)"
+  ></owner-info-dialog>
+  <br>
+  <ng-container *ngIf="!edit">
+    <mat-form-field>
+      <mat-label>Filtrar</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ejm. 20192, Ejm. Carlos, Ejm. Algebra">
+    </mat-form-field>
+
+    <div class="scroll mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> NOMBRE </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+
+        <!-- Email Colum -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef> CORREO </th>
+          <td mat-cell *matCellDef="let element" style="text-align: justify;">{{element.email}}</td>
+        </ng-container>
+
+        <!-- Cellphone Column-->
+        <ng-container matColumnDef="cellphone">
+          <th mat-header-cell *matHeaderCellDef> TELEFONO </th>
+          <td mat-cell *matCellDef="let element"> {{element.cellphone}} </td>
+        </ng-container>
+
+        <!-- Edit icon Column -->
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef> EDITAR </th>
+          <td mat-cell *matCellDef="let element" style="text-align: justify;">
+            <button mat-button matTooltip="Ver evaluaciones" (click)="updateOwner(element.id)">
+              <mat-icon style="color: #18b9d2d2;">create</mat-icon>
+            </button>
+        </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+      </table>
+      <mat-spinner *ngIf="isResulstEmpty && spinner" diameter="30" style="margin:0 auto;"></mat-spinner>
+      <mat-paginator [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+    </div>
+  </ng-container>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="onNoClick()" cdkFocusInitial type="reset" style="background-color: #2b6f54;">Regresar</button>
+</mat-dialog-actions>

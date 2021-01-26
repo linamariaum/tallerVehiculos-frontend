@@ -462,7 +462,6 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
                 }
               );
             }
-          }
         },
         (error) => {
           console.error(error);

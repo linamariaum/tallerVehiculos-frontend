@@ -2,25 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
-  FormGroupDirective,
-  NgForm,
   Validators,
 } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
-
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(
-    control: FormControl | null,
-    form: FormGroupDirective | NgForm | null
-  ): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(
-      control &&
-      control.invalid &&
-      (control.dirty || control.touched || isSubmitted)
-    );
-  }
-}
+import { Router } from '@angular/router';
+import { OwnerService } from 'src/app/services/owner.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login-owner',
@@ -28,31 +14,32 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['./login-owner.component.scss'],
 })
 export class LoginOwnerComponent implements OnInit {
-  waitingToken: boolean = false;
-
   loginOwnerForm = new FormGroup({
     emailFormControl: new FormControl('', [
       Validators.required,
       Validators.email,
-    ]),
-    tokenFormControl: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-    ]),
+    ])
   });
 
-  matcher = new MyErrorStateMatcher();
-
-  constructor() {}
+  constructor(private ownerService: OwnerService, private router: Router) {}
 
   ngOnInit(): void {}
 
-  sendToken(form: FormGroup) {
-    console.log(form);
-    this.waitingToken = true;
+  sendToken() {
+    console.log(this.loginOwnerForm.get('emailFormControl').value);
+    const login = {
+      email: this.loginOwnerForm.get('emailFormControl').value,
+      password: 'password'
+    };
+    this.ownerService.loginOwner(login);
+    Swal.fire({
+      icon: 'info',
+      title: 'Se envió enlace de acceso a su correo',
+      showConfirmButton: true,
+      confirmButtonColor: '#34c4b7',
+    }).then(async (result) => {
+      this.router.navigate(['/homepage']);
+    })
   }
 
-  login(form: FormGroup) {
-    console.log(form);
-  }
 }

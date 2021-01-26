@@ -132,27 +132,23 @@ export class LoginEmlpoyeeComponent implements OnInit {
   }
 
   async getEmployee(email) {
-    await this.employeeService.getEmployee(email).then(
-      async (user: any) => {
-        if (user) {
-          const aux = JSON.parse(user);
-          this.user = aux;
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text:
-              'No tiene permiso para acceder a este recurso! Redireccionando',
-            showConfirmButton: true,
-            confirmButtonColor: '#34c4b7',
-          });
-          this.router.navigate(['/homepage']);
-        }
-      },
-      (error) => {
-        console.error(error);
+    await this.employeeService.getEmployee(email).then(async (user: any) => {
+      if (user) {
+        const aux = JSON.parse(user);
+        this.user = aux;
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'No tiene permiso para acceder a este recurso! Redireccionando',
+          showConfirmButton: true,
+          confirmButtonColor: '#34c4b7',
+        });
         this.router.navigate(['/homepage']);
       }
-    );
+    }, error => {
+      console.error(error)
+      this.router.navigate(['/homepage']);
+    });
   }
 }

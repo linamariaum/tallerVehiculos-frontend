@@ -209,7 +209,6 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
           this.APIVehicle.createVehicle(newVehicle).then(
             (data) => {
               if (data) {
-                data = JSON.parse(data);
                 if (data.length > 0) {
                   var response: any = {
                     plate: result.value[0],
@@ -223,6 +222,13 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
                     id: JSON.parse(data).id,
                   };
                   this.dataSource.data.push(response);
+                  Swal.fire({
+                    icon: 'success',
+                    title:
+                      'Vehículo creado exitosamente, el supervisor se encargrá de gestionarlo',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#34c4b7',
+                  });
                   return (this.dataSource.filter = '');
                 }
               }
@@ -264,6 +270,12 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
           data = JSON.parse(data);
           var i = this.dataSource.data.indexOf(element);
           this.dataSource.data.splice(i, 1);
+          Swal.fire({
+            icon: 'success',
+            title: 'Vehículo eliminado exitosamente',
+            showConfirmButton: true,
+            confirmButtonColor: '#34c4b7',
+          });
           return (this.dataSource.filter = '');
         }
       },
@@ -369,6 +381,12 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
                   result = JSON.parse(result);
                   var i = this.dataSource.data.indexOf(element);
                   this.dataSource.data[i] = data;
+                  Swal.fire({
+                    icon: 'success',
+                    title: 'Vehículo actualizado exitosamente',
+                    showConfirmButton: true,
+                    confirmButtonColor: '#34c4b7',
+                  });
                   return (this.dataSource.filter = '');
                 }
               },
@@ -462,6 +480,7 @@ export class EmployeeTechnicalComponent implements AfterViewInit, OnInit {
                 }
               );
             }
+          }
         },
         (error) => {
           console.error(error);

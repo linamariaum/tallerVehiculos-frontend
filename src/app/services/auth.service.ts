@@ -8,27 +8,26 @@ const urlMapping = '/auth/login';
 const urlBase = environment.serviceURL;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   private urlApi = urlBase + urlMapping;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   httpOptions = {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Authorization: 'bearer ' + sessionStorage.getItem('cod'),
     }),
-    responseType: 'text' as 'json'
+    responseType: 'text' as 'json',
   };
 
   async getUser(login: any): Promise<any> {
-    return await this.http.post<any>(this.urlApi, JSON.stringify(login), this.httpOptions)
-      .pipe(
-        retry(1),
-        catchError(this.handleError)
-      ).toPromise();
+    return await this.http
+      .post<any>(this.urlApi, JSON.stringify(login), this.httpOptions)
+      .pipe(retry(1), catchError(this.handleError))
+      .toPromise();
   }
 
   // Error handling

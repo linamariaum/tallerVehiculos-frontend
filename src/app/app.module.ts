@@ -36,6 +36,7 @@ import { OwnerDialogNo } from './components/employee-supervisor/ownerDialog';
 import { OwnerDialog } from './components/ownerDialog/owner-dialog'
 import { OwnerInfoDialog } from './components/ownerDialog/ownerInfo'
 import { from } from 'rxjs';
+import { OwnerComponent } from './components/owner/owner.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { from } from 'rxjs';
     OwnerDialogNo,
     OwnerDialog,
     EmployeeSupervisorComponent,
-    OwnerInfoDialog
+    OwnerInfoDialog,
+    OwnerComponent
   ],
   entryComponents: [
     EmployeeDialog,

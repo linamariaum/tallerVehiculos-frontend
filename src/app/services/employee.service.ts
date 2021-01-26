@@ -21,12 +21,12 @@ export class EmployeeService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': 'bearer '+sessionStorage.getItem('cod')
+      Authorization: 'bearer ' + sessionStorage.getItem('cod'),
     }),
     responseType: 'text' as 'json',
   };
 
-  async getAllEmployees(): Promise<any[]> {
+  async getAllEmployees(): Promise<any> {
     return await this.http
       .get<any[]>(this.urlApi, this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))
@@ -40,7 +40,7 @@ export class EmployeeService {
       .toPromise();
   }
 
-  async createEmployee(employee: NewEmployeeRequests): Promise<Employee> {
+  async createEmployee(employee: NewEmployeeRequests): Promise<any> {
     return await this.http
       .post<any>(this.urlApi, JSON.stringify(employee), this.httpOptions)
       .pipe(retry(1), catchError(this.handleError))

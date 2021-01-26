@@ -62,6 +62,7 @@ export class EmployeeAssistantComponent implements OnInit {
 
   async ngOnInit() {
     this.roleService.getAll().subscribe((data) => {
+      data = JSON.parse(data);
       const datos = data;
       this.roles = datos;
     });
@@ -70,7 +71,8 @@ export class EmployeeAssistantComponent implements OnInit {
     });
     const email = sessionStorage.getItem('email');
     if (email) {
-      await this.employeeService.getEmployee(email).then((user: Employee) => {
+      await this.employeeService.getEmployee(email).then((user: any) => {
+        user = JSON.parse(user);
         if (user.role.name === 'management-assistant') {
           this.userEmployee = user;
         } else {
@@ -110,6 +112,7 @@ export class EmployeeAssistantComponent implements OnInit {
 
   onChanges() {
     this.control.get('controlRole').valueChanges.subscribe((selectedRole) => {
+      selectedRole = JSON.parse(selectedRole);
       if (selectedRole != '0') {
         let employeeFilter = this.searchEmployeeByRole(selectedRole);
         if (employeeFilter.length > 0) {
@@ -153,6 +156,7 @@ export class EmployeeAssistantComponent implements OnInit {
   async loadEmployees() {
     return this.employeeService.getAllEmployees().then(
       (data) => {
+        data = JSON.parse(data);
         if (data && data.length > 0) {
           data.forEach((element) => {
             let employee: Employee = {
@@ -235,6 +239,7 @@ export class EmployeeAssistantComponent implements OnInit {
     return this.employeeService.createEmployee(newEmployee).then(
       async (data) => {
         if (data) {
+          data = JSON.parse(data);
           Swal.fire({
             icon: 'success',
             title: `Empleado agregado exitosamente.`,
@@ -258,6 +263,7 @@ export class EmployeeAssistantComponent implements OnInit {
     return this.employeeService.updateEmployee(id, updateEmployee).then(
       async (data) => {
         if (data) {
+          data = JSON.parse(data);
           Swal.fire({
             icon: 'success',
             title: 'Información del empleado actualizada correctamente.',
